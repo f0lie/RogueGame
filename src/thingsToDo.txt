@@ -1,0 +1,26 @@
+--Input--
+-Keybindings
+-Menu screen and option screen
+-Saving
+
+--Map--
+-Random gen map,
+        items,
+        mobs,
+        name,
+        everything
+-Configure window size?
+
+--Display--
+-GUI
+-Dialogue
+
+--Entities--
+-Items
+-Stats
+-Health and Mana
+-Skills
+-Mobsters
+    Bosses
+-Combat
+-Magic
