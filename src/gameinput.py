@@ -17,10 +17,10 @@ class GameInput(object):
 
 		:param stdscr: Curses screen to take input
 		'''
-		self.stdscr = stdscr
+		self._stdscr = stdscr
 
 	def get_movekey(self):
-		input = self.stdscr.getch()
+		input = self._stdscr.getch()
 
 		# Return the MoveKey that matches the input
 		for key in MoveKey:
