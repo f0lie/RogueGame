@@ -1,9 +1,9 @@
 from curses import *
 
-from src import gamemap
-from src import gamedisplay
-from src import gameinput
-from src import gameentity
+import gamemap
+import gamedisplay
+import gameinput
+import gameentity
 
 '''
 	Screen should be 80x24 like a VT100
@@ -15,8 +15,8 @@ def main(stdscr):
 	curs_set(0)
 	stdscr.keypad(True)
 
-	map = gamemap.Gamemap(10, 10)
-	display = gamedisplay.GameDisplayMap(stdscr, map, 1, 1)
+	map = gamemap.Gamemap(15, 15, fill='.')
+	display = gamedisplay.GameDisplayMap(stdscr, map, 5, 20)
 	input = gameinput.GameInput(stdscr)
 	player = gameentity.GameEntity()
 
