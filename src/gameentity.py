@@ -22,9 +22,9 @@ class GameEntity(object):
 		'''
 		if key.name == MoveKey.forward.name:
 			self.pos_y -= 1
-		if key.name == MoveKey.backward.name:
+		elif key.name == MoveKey.backward.name:
 			self.pos_y += 1
-		if key.name == MoveKey.left.name:
+		elif key.name == MoveKey.left.name:
 			self.pos_x -= 1
-		if key.name == MoveKey.right.name:
+		elif key.name == MoveKey.right.name:
 			self.pos_x += 1
