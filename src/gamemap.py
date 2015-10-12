@@ -5,17 +5,17 @@ def bound(func):
 	'''
 
 	def check(self, entity):
-		if entity.pos_x < 0:
-			entity.pos_x = 0
+		if entity.pos.x < 0:
+			entity.pos.x = 0
 
-		if entity.pos_y < 0:
-			entity.pos_y = 0
+		if entity.pos.y < 0:
+			entity.pos.y = 0
 
-		if entity.pos_x > self.width - 1:
-			entity.pos_x = self.width - 1
+		if entity.pos.x > self.width - 1:
+			entity.pos.x = self.width - 1
 
-		if entity.pos_y > self.height - 1:
-			entity.pos_y = self.height - 1
+		if entity.pos.y > self.height - 1:
+			entity.pos.y = self.height - 1
 
 		return func(self, entity)
 
@@ -53,7 +53,7 @@ class Gamemap(object):
 
 		:param entity: The entity object to be read
 		'''
-		self.map[entity.pos_y][entity.pos_x] = entity.icon
+		self.map[entity.pos.y][entity.pos.x] = entity.icon
 
 	def flush(self):
 		''' Read entire map and replace any character that isn't empty with empty '''

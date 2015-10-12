@@ -1,3 +1,5 @@
+import position
+
 class GameDisplay(object):
 	def __init__(self, stdscr, pos_y=0, pos_x=0):
 		'''
@@ -8,9 +10,7 @@ class GameDisplay(object):
 		:param pos_x: The x position on the screen to begin drawing
 		'''
 		self._stdscr = stdscr
-		self.pos_y = pos_y
-		self.pos_x = pos_x
-
+		self.pos = position.Position(pos_y, pos_x)
 
 class GameDisplayMap(GameDisplay):
 	def __init__(self, stdscr, map, pos_y=0, pos_x=0):
@@ -21,7 +21,7 @@ class GameDisplayMap(GameDisplay):
 		stdscr.resize(self.game_map.height + 2, self.game_map.width + 2)
 		stdscr.border()
 
-		self._stdscr.mvwin(self.pos_y, self.pos_x)
+		self._stdscr.mvwin(self.pos.y, self.pos.x)
 
 	def refresh_map(self):
 		''' Draw the entire map on the screen and refresh the screen '''

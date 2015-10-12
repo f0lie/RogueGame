@@ -16,7 +16,7 @@ def main(stdscr):
 	stdscr.keypad(True)
 
 	map = gamemap.Gamemap(15, 15, fill=curses.ACS_BULLET)
-	display = gamedisplay.GameDisplayMap(stdscr, map, 5, 20)
+	display = gamedisplay.GameDisplayMap(stdscr, map, 5, 5)
 	input = gameinput.GameInput(stdscr)
 	player = gameentity.GameEntity()
 
