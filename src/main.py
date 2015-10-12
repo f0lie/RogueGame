@@ -1,4 +1,4 @@
-from curses import *
+import curses
 
 import gamemap
 import gamedisplay
@@ -12,10 +12,10 @@ import gameentity
 
 
 def main(stdscr):
-	curs_set(0)
+	curses.curs_set(0)
 	stdscr.keypad(True)
 
-	map = gamemap.Gamemap(15, 15, fill='.')
+	map = gamemap.Gamemap(15, 15, fill=curses.ACS_BULLET)
 	display = gamedisplay.GameDisplayMap(stdscr, map, 5, 20)
 	input = gameinput.GameInput(stdscr)
 	player = gameentity.GameEntity()
@@ -40,4 +40,4 @@ def main(stdscr):
 
 
 if __name__ == "__main__":
-	wrapper(main)
+	curses.wrapper(main)
