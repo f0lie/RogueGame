@@ -13,6 +13,7 @@ class Entity(object):
 		'''
 		self.pos = position.Position(pos_y, pos_x)
 		self.icon = icon
+		self.key = MoveKey.none
 
 	def move(self, key):
 		'''
@@ -20,11 +21,13 @@ class Entity(object):
 
 		:param key: Keys that the method receives
 		'''
-		if key.name == MoveKey.up.name:
+		if key == MoveKey.up:
 			self.pos.moveUp()
-		elif key.name == MoveKey.down.name:
+		elif key == MoveKey.down:
 			self.pos.moveDown()
-		elif key.name == MoveKey.left.name:
+		elif key == MoveKey.left:
 			self.pos.moveLeft()
-		elif key.name == MoveKey.right.name:
+		elif key == MoveKey.right:
 			self.pos.moveRight()
+
+		self.key = key
