@@ -1,6 +1,6 @@
 import position
 
-class GameDisplay(object):
+class Display(object):
 	def __init__(self, stdscr, pos_y=0, pos_x=0):
 		'''
 		Object that interacts with curses
@@ -12,7 +12,7 @@ class GameDisplay(object):
 		self._stdscr = stdscr
 		self.pos = position.Position(pos_y, pos_x)
 
-class GameDisplayMap(GameDisplay):
+class DisplayMap(Display):
 	def __init__(self, stdscr, map, pos_y=0, pos_x=0):
 		super().__init__(stdscr, pos_y, pos_x)
 

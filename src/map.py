@@ -22,7 +22,7 @@ def bound(func):
 	return check
 
 
-class Gamemap(object):
+class Map(object):
 	def __init__(self, height=10, width=10, fill='-'):
 		'''
 		The object that contains the map of characters for the game

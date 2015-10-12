@@ -1,8 +1,8 @@
-from gameinput import MoveKey
+from input import MoveKey
 import position
 
 
-class GameEntity(object):
+class Entity(object):
 	def __init__(self, pos_y=0, pos_x=0, icon='@'):
 		'''
 		The object that contains an entity with pos_x and pos_y with an icon to represent it

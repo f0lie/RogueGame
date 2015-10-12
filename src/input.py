@@ -10,7 +10,7 @@ class MoveKey(Enum):
 	none = None
 
 
-class GameInput(object):
+class Input(object):
 	def __init__(self, stdscr):
 		'''
 		Uses curses screen to take in input

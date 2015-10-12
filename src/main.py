@@ -1,9 +1,9 @@
 import curses
 
-import gamemap
-import gamedisplay
-import gameinput
-import gameentity
+import map
+import display
+import input
+import entity
 
 '''
 	Screen should be 80x24 like a VT100
@@ -15,27 +15,27 @@ def main(stdscr):
 	curses.curs_set(0)
 	stdscr.keypad(True)
 
-	map = gamemap.Gamemap(15, 15, fill=curses.ACS_BULLET)
-	display = gamedisplay.GameDisplayMap(stdscr, map, 5, 5)
-	input = gameinput.GameInput(stdscr)
-	player = gameentity.GameEntity()
+	game_map = map.Map(15, 15, fill=curses.ACS_BULLET)
+	game_display = display.DisplayMap(stdscr, game_map, 5, 5)
+	game_input = input.Input(stdscr)
+	player = entity.Entity()
 
-	map.put_entity(player)
+	game_map.put_entity(player)
 
-	display.refresh_map()
+	game_display.refresh_map()
 
 	done = False
 	while not done:
-		key = input.get_movekey()
+		key = game_input.get_movekey()
 		player.move(key)
 
-		map.flush()
+		game_map.flush()
 
-		map.put_entity(player)
+		game_map.put_entity(player)
 
-		display.refresh_map()
+		game_display.refresh_map()
 
-		if key == gameinput.MoveKey.done:
+		if key == input.MoveKey.done:
 			done = True
 
 
