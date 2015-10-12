@@ -11,16 +11,16 @@ class MoveKey(Enum):
 
 
 class Input(object):
-	def __init__(self, stdscr):
+	def __init__(self, scr):
 		'''
 		Uses curses screen to take in input
 
-		:param stdscr: Curses screen to take input
+		:param scr: Curses screen to take input
 		'''
-		self._stdscr = stdscr
+		self.scr = scr
 
 	def get_movekey(self):
-		input = self._stdscr.getch()
+		input = self.scr.getch()
 
 		# Return the MoveKey that matches the input
 		for key in MoveKey:
