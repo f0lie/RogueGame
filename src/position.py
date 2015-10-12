@@ -3,6 +3,9 @@ class Position(object):
 		self.y = y
 		self.x = x
 
+	def get_pos(self):
+		return self.y, self.x
+
 	def move(self, y, x):
 		self.y = y
 		self.x = x
