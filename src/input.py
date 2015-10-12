@@ -19,7 +19,7 @@ class Input(object):
 		'''
 		self.scr = scr
 
-	def get_movekey(self):
+	def get_move_key(self):
 		input = self.scr.getch()
 
 		# Return the MoveKey that matches the input
