@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class MoveKey(Enum):
-	forward = ord('w')
-	backward = ord('s')
+	up = ord('w')
+	down = ord('s')
 	left = ord('a')
 	right = ord('d')
 	done = ord('1')

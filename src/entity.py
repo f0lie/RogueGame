@@ -20,9 +20,9 @@ class Entity(object):
 
 		:param key: Keys that the method receives
 		'''
-		if key.name == MoveKey.forward.name:
+		if key.name == MoveKey.up.name:
 			self.pos.moveUp()
-		elif key.name == MoveKey.backward.name:
+		elif key.name == MoveKey.down.name:
 			self.pos.moveDown()
 		elif key.name == MoveKey.left.name:
 			self.pos.moveLeft()
