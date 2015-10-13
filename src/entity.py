@@ -22,12 +22,12 @@ class Entity(object):
 		:param key: Keys that the method receives
 		'''
 		if key == MoveKey.up:
-			self.pos.moveUp()
+			self.pos.move_up()
 		elif key == MoveKey.down:
-			self.pos.moveDown()
+			self.pos.move_down()
 		elif key == MoveKey.left:
-			self.pos.moveLeft()
+			self.pos.move_left()
 		elif key == MoveKey.right:
-			self.pos.moveRight()
+			self.pos.move_right()
 
 		self.key = key

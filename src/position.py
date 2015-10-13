@@ -10,14 +10,14 @@ class Position(object):
 		self.y = y
 		self.x = x
 
-	def moveUp(self):
+	def move_up(self):
 		self.y -= 1
 
-	def moveDown(self):
+	def move_down(self):
 		self.y += 1
 
-	def moveLeft(self):
+	def move_left(self):
 		self.x -= 1
 
-	def moveRight(self):
+	def move_right(self):
 		self.x += 1
