@@ -8,13 +8,13 @@ class Orientation(Enum):
 
 class Display(object):
 	def __init__(self, scr, pos_y=0, pos_x=0):
-		'''
+		"""
 		Object that interacts with curses to display on screen
 
 		:param scr: The curses object
 		:param pos_y: Y position to draw screen
 		:param pos_x: X position to draw screen
-		'''
+		"""
 		self._scr = scr
 
 		# Resize screen to something small so moving it doesn't crash game
@@ -35,17 +35,17 @@ class Display(object):
 
 
 class DisplayMap(Display):
-	def __init__(self, scr, map, pos_y=0, pos_x=0):
+	def __init__(self, scr, game_map, pos_y=0, pos_x=0):
 		super().__init__(scr, pos_y, pos_x)
 
-		self.game_map = map
+		self.game_map = game_map
 
-		# Resize screen to fit borders and the game map
+		# Resize screen to fit borders and the game game_map
 		self._scr.resize(self.game_map.height + 2, self.game_map.width + 2)
 		self._scr.border()
 
 	def refresh_map(self):
-		''' Draw the entire map on the screen and refresh the screen '''
+		""" Draw the entire map on the screen and refresh the screen """
 
 		# Move the cursor to within the borders of the screen
 		self._scr.move(1, 1)
@@ -76,11 +76,11 @@ class DisplayGUI(Display):
 		self._scr.refresh()
 
 	def _orient(self, hook_display):
-		'''
+		"""
 		Uses orients to figure out where to put the screen
 
 		:param hook_display: The display to attach the screen to
-		'''
+		"""
 		if self.orient == Orientation.right or self.orient == Orientation.none:
 			self.pos.y = hook_display.pos.y
 			self.pos.x = hook_display.pos.x + hook_display.get_width()
