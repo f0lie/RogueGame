@@ -1,7 +1,6 @@
 from enum import Enum
 
 import curses
-from curses import panel
 
 import position
 
