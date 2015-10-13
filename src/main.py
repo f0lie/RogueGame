@@ -10,6 +10,7 @@ import entity
 	I'll figure out how to deal with different screens or enforce this.
 '''
 
+
 def main(stdscr):
 	curses.curs_set(0)
 	stdscr.keypad(True)

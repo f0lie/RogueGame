@@ -19,7 +19,7 @@ class Display(object):
 
 		# Resize screen to something small so moving it doesn't crash game
 		height, width = scr.getmaxyx()
-		self._scr.resize(1,1)
+		self._scr.resize(1, 1)
 
 		self.pos = position.Position(pos_y, pos_x)
 		self._scr.mvwin(*self.pos.get_pos())
@@ -33,6 +33,7 @@ class Display(object):
 	def get_width(self):
 		return self._scr.getmaxyx()[1]
 
+
 class DisplayMap(Display):
 	def __init__(self, scr, map, pos_y=0, pos_x=0):
 		super().__init__(scr, pos_y, pos_x)
@@ -40,7 +41,7 @@ class DisplayMap(Display):
 		self.game_map = map
 
 		# Resize screen to fit borders and the game map
-		self._scr.resize(self.game_map.height+2, self.game_map.width+2)
+		self._scr.resize(self.game_map.height + 2, self.game_map.width + 2)
 		self._scr.border()
 
 	def refresh_map(self):
@@ -58,6 +59,7 @@ class DisplayMap(Display):
 			self._scr.move(cursor_y + i + 1, cursor_x)
 
 		self._scr.refresh()
+
 
 class DisplayGUI(Display):
 	def __init__(self, scr, hook_display, orient=Orientation.none, fill=ord(' '), pos_y=0, pos_x=0):
