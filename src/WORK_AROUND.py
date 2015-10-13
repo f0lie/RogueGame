@@ -1,8 +1,8 @@
 import os
 
 '''
-For some reason my IDE's terminal doesn't support "redirection"
-This file is for a work around the IDE's terminal and use windows's cmd
+For some reason my  IDE terminal doesn't support "redirection"
+This file is for a work around the IDE terminal and use windows's cmd
 You don't have to run this, just run main.py and it SHOULD be fine
 '''
 
