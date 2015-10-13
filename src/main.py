@@ -2,6 +2,7 @@ import curses
 
 import map
 import display
+from display import Display
 import input
 import entity
 
@@ -21,13 +22,15 @@ def main(stdscr):
 	game_display = display.DisplayMap(game_map)
 
 	game_gui = display.DisplayHook(game_display, display.Orientation.right, 12, 10)
+	for i in range(5):
+		game_gui.print("hello", i, 0)
 
 	player = entity.Entity()
 	game_map.put_entity(player)
 
 	game_display.refresh_map()
 	game_gui.refresh()
-	curses.doupdate()
+	Display.update()
 
 	done = False
 	while not done:
@@ -39,7 +42,7 @@ def main(stdscr):
 		game_map.put_entity(player)
 
 		game_display.refresh_map()
-		curses.doupdate()
+		Display.update()
 
 		if key == input.MoveKey.done:
 			done = True

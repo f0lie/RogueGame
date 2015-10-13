@@ -31,6 +31,9 @@ class Display(object):
 		''' Avoid spamming doupdate with regular win.refresh '''
 		self._win.noutrefresh()
 
+	@staticmethod
+	def update():
+		curses.doupdate()
 
 class DisplayMap(Display):
 	def __init__(self, game_map, pos_y=0, pos_x=0):
@@ -52,6 +55,14 @@ class DisplayHook(Display):
 		self.orient = orient
 		# Move the screen to the hooked display
 		self._orient(hook_display)
+
+		self._word_win = self._win.subwin(rows-2, cols-2, self.pos.y+1, self.pos.x+1)
+
+	def print(self, str, y=None, x=None):
+		if y != None or x != None:
+			self._word_win.addstr(y, x, str)
+		else:
+			self._word_win.addstr(str)
 
 	def _orient(self, hook_display):
 		if self.orient == Orientation.right or self.orient == Orientation.none:
