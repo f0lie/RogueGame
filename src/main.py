@@ -13,19 +13,21 @@ import entity
 
 def main(stdscr):
 	curses.curs_set(0)
-	stdscr.keypad(True)
+	stdscr.noutrefresh()
 
-	game_map = map.Map(5, 5, fill=curses.ACS_BULLET)
-	game_display = display.DisplayMap(stdscr, game_map, 7, 7)
 	game_input = input.Input(stdscr)
+
+	game_map = map.Map(10, 30, fill=curses.ACS_BULLET)
+	game_display = display.DisplayMap(game_map)
+
+	game_gui = display.DisplayHook(game_display, display.Orientation.right, 12, 10)
+
 	player = entity.Entity()
-
-	gui_scr = curses.newwin(5, 5)
-	display.DisplayGUI(gui_scr, game_display, display.Orientation.right)
-
 	game_map.put_entity(player)
 
 	game_display.refresh_map()
+	game_gui.refresh()
+	curses.doupdate()
 
 	done = False
 	while not done:
@@ -37,6 +39,7 @@ def main(stdscr):
 		game_map.put_entity(player)
 
 		game_display.refresh_map()
+		curses.doupdate()
 
 		if key == input.MoveKey.done:
 			done = True
