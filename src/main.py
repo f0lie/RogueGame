@@ -18,12 +18,13 @@ def main(stdscr):
 
 	game_input = input.Input(stdscr)
 
-	game_map = map.Map(10, 30, fill=curses.ACS_BULLET)
+	game_map = map.Map(10, 10)
 	game_display = display.DisplayMap(game_map)
 
-	game_gui = display.DisplayHook(game_display, display.Orientation.right, 12, 10)
-	for i in range(5):
-		game_gui.print("hello", i, 0)
+	game_gui = display.DisplayHook(game_display, display.Orientation.right, 12, 12)
+
+	for i in range(game_gui.rows - 2):
+		game_gui.print('hello', i, 0)
 
 	player = entity.Entity()
 	game_map.put_entity(player)

@@ -11,11 +11,11 @@ def bound(func):
 		if entity.pos.y < 0:
 			entity.pos.y = 0
 
-		if entity.pos.x > self.width - 1:
-			entity.pos.x = self.width - 1
+		if entity.pos.x > self.cols-1:
+			entity.pos.x = self.cols-1
 
-		if entity.pos.y > self.height - 1:
-			entity.pos.y = self.height - 1
+		if entity.pos.y > self.rows-1:
+			entity.pos.y = self.rows-1
 
 		return func(self, entity)
 
@@ -23,28 +23,14 @@ def bound(func):
 
 
 class Map(object):
-	def __init__(self, height=10, width=10, fill='-'):
-		"""
-		The object that contains the map of characters for the game
-
-		:param height: height of the map
-		:param width:  width of the map
-		:param fill: character representation of empty
-		"""
-		self.map = [[fill for col in range(width)] for row in range(height)]
-		self.height = height
-		self.width = width
-		self.fill = fill
+	def __init__(self, rows=1, cols=1):
+		self.fill = 0
+		self.map = [[self.fill for col in range(cols)] for row in range(rows)]
+		self.rows = rows
+		self.cols = cols
 
 	def put_icon(self, row, col, icon):
-		"""
-		Takes row and col parameters and puts a icon on the position
-
-		:param row: row position of icon
-		:param col: col position of icon
-		:param icon: character to be placed
-		"""
-		self.map[row][col] = icon
+		self.map[row, col] = icon
 
 	@bound
 	def put_entity(self, entity):
@@ -56,8 +42,9 @@ class Map(object):
 		self.map[entity.pos.y][entity.pos.x] = entity.icon
 
 	def flush(self):
-		""" Read entire map and replace any character that isn't empty with empty """
-		for row in range(len(self.map)):
-			for col in range(len(self.map[row])):
-				if self.map[row][col] != self.fill:
-					self.map[row][col] = self.fill
+		for row in range(self.rows):
+			for col in range(self.cols):
+				self.map[row][col] = self.fill
+
+	def get(self, row, col):
+		return self.map[row][col]

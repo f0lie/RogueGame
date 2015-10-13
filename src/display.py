@@ -16,16 +16,10 @@ class Display(object):
 		"""
 		self.pos = position.Position(pos_y, pos_x)
 
-		self._win = curses.newwin(1, 1, pos_y, pos_x)
-		self._win.mvwin(*self.pos.get_pos())
-		self._win.resize(rows, cols)
+		self._win = curses.newwin(rows, cols, pos_y, pos_x)
 		self._win.border()
 
-	def get_height(self):
-		return self._win.getmaxyx()[0]
-
-	def get_width(self):
-		return self._win.getmaxyx()[1]
+		self.rows, self.cols = rows, cols
 
 	def refresh(self):
 		''' Avoid spamming doupdate with regular win.refresh '''
@@ -37,16 +31,23 @@ class Display(object):
 
 class DisplayMap(Display):
 	def __init__(self, game_map, pos_y=0, pos_x=0):
+		self.graphic = {0:curses.ACS_BULLET, 1:ord('@')}
+
 		self.game_map = game_map
-		super().__init__(game_map.height+2, game_map.width+2, pos_y, pos_x)
+		super().__init__(game_map.rows+2, game_map.cols+2, pos_y, pos_x)
+
+		self._win_map = self._win.subwin((self.rows-2)+1, self.cols-2,
+		                                 pos_y+1, pos_x+1)
+		self._win.noutrefresh()
 
 	def refresh_map(self):
 		""" Draw the entire map on the screen and refresh the screen """
-		for i, row in enumerate(self.game_map.map):
-			self._win.move(i+1, 1)
-			for icon in row:
-				self._win.addch(icon)
-		self.refresh()
+		for row in range(self.game_map.rows):
+			for col in range(self.game_map.cols):
+				item = self.game_map.get(row, col)
+				self._win_map.addch(row, col, self.graphic.get(item, 'X'))
+
+		self._win_map.noutrefresh()
 
 class DisplayHook(Display):
 	def __init__(self, hook_display, orient=Orientation.none, rows=1, cols=1):
@@ -56,29 +57,30 @@ class DisplayHook(Display):
 		# Move the screen to the hooked display
 		self._orient(hook_display)
 
-		self._word_win = self._win.subwin(rows-2, cols-2, self.pos.y+1, self.pos.x+1)
+		self._win_word = self._win.subwin((rows-2)+1, cols-2,
+		                                  self.pos.y+1, self.pos.x+1)
 
 	def print(self, str, y=None, x=None):
 		if y != None or x != None:
-			self._word_win.addstr(y, x, str)
+			self._win_word.addstr(y, x, str)
 		else:
-			self._word_win.addstr(str)
+			self._win_word.addstr(str)
 
 	def _orient(self, hook_display):
 		if self.orient == Orientation.right or self.orient == Orientation.none:
 			self.pos.y = hook_display.pos.y
-			self.pos.x = hook_display.pos.x + hook_display.get_width()
+			self.pos.x = hook_display.pos.x + hook_display.cols
 
 		elif self.orient == Orientation.left:
 			self.pos.y = hook_display.pos.y
-			self.pos.x = hook_display.pos.x - self.get_width()
+			self.pos.x = hook_display.pos.x - self.cols
 
 		elif self.orient == Orientation.bottom:
-			self.pos.y = hook_display.pos.y + hook_display.get_height()
+			self.pos.y = hook_display.pos.y + hook_display.rows
 			self.pos.x = hook_display.pos.x
 
 		elif self.orient == Orientation.top:
-			self.pos.y = hook_display.pos.y - self.get_height()
+			self.pos.y = hook_display.pos.y - self.rows
 			self.pos.x = hook_display.pos.x
 
 		self._win.mvwin(*self.pos.get_pos())

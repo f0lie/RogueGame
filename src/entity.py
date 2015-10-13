@@ -3,7 +3,7 @@ import position
 
 
 class Entity(object):
-	def __init__(self, pos_y=0, pos_x=0, icon='@'):
+	def __init__(self, pos_y=0, pos_x=0, icon=1):
 		"""
 		The object that contains an entity with pos_x and pos_y with an icon to represent it
 
