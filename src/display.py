@@ -35,12 +35,13 @@ class DisplayMap(Display):
 		self.game_map = game_map
 		super().__init__(game_map.rows + 2, game_map.cols + 2, pos_y, pos_x)
 
-		self._win_map = self._win.subwin((self.rows - 2) + 1, self.cols - 2,
-		                                 pos_y + 1, pos_x + 1)
+		self._win_map = self._win.derwin((self.rows - 2)+1, self.cols - 2, 1, 1)
 		self._win.noutrefresh()
 
 		self.graphic = {
 			Block.empty: curses.ACS_BULLET,
+			Block.wall: curses.ACS_BLOCK,
+			Block.space: ord(' '),
 			Entity.player: ord('@')
 		}
 
@@ -51,6 +52,7 @@ class DisplayMap(Display):
 				item = self.game_map.get(row, col)
 				self._win_map.addch(row, col, self.graphic.get(item, 'X'))
 
+		self._win_map.move(0, 0)
 		self._win_map.noutrefresh()
 
 
@@ -62,14 +64,22 @@ class DisplayHook(Display):
 		# Move the screen to the hooked display
 		self._orient(hook_display)
 
-		self._win_word = self._win.subwin((rows - 2) + 1, cols - 2,
-		                                  self.pos.y + 1, self.pos.x + 1)
+		self._win_word = self._win.derwin((rows - 2) + 1, cols - 2, 1, 1)
 
-	def print(self, str, y=None, x=None):
+	def print(self, str, y=None, x=None, clear_line=False):
+		if self._win_word.getyx()[0] == (self.rows-2):
+			self._win_word.move(0,0)
+
+		if clear_line:
+			self._win_word.move(y, x)
+			self._win_word.clrtoeol()
+
 		if y != None or x != None:
 			self._win_word.addstr(y, x, str)
 		else:
 			self._win_word.addstr(str)
+
+		self._win_word.noutrefresh()
 
 	def _orient(self, hook_display):
 		if self.orient == Orientation.right or self.orient == Orientation.none:
