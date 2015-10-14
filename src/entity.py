@@ -1,9 +1,10 @@
-from input import MoveKey
+from input import Move
 import position
+import block
 
 
 class Entity(object):
-	def __init__(self, pos_y=0, pos_x=0, icon=1):
+	def __init__(self, pos_y=0, pos_x=0, icon=block.Entity.player):
 		"""
 		The object that contains an entity with pos_x and pos_y with an icon to represent it
 
@@ -13,21 +14,16 @@ class Entity(object):
 		"""
 		self.pos = position.Position(pos_y, pos_x)
 		self.icon = icon
-		self.key = MoveKey.none
+		self.moved = Move.none
 
-	def move(self, key):
-		"""
-		Take in keys and move the characters based off it
-
-		:param key: Keys that the method receives
-		"""
-		if key == MoveKey.up:
+	def move(self, direction):
+		if direction == Move.up:
 			self.pos.move_up()
-		elif key == MoveKey.down:
+		elif direction == Move.down:
 			self.pos.move_down()
-		elif key == MoveKey.left:
+		elif direction == Move.left:
 			self.pos.move_left()
-		elif key == MoveKey.right:
+		elif direction == Move.right:
 			self.pos.move_right()
 
-		self.key = key
+		self.moved = direction
