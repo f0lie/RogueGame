@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Block(Enum):
-	wall, empty = range(2)
+	wall, space, empty = range(3)
 
 
 class Entity(Enum):
