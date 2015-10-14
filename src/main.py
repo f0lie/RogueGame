@@ -30,7 +30,10 @@ def main(stdscr):
 	player = entity.Entity()
 	game_map.put_entity(player)
 
+	game_gui.print(str(player.pos.get_pos()), 0, 0, True)
+
 	game_gui.refresh()
+	game_display.refresh_map()
 	Display.update()
 
 	done = False
@@ -44,7 +47,6 @@ def main(stdscr):
 
 		game_gui.print(str(player.pos.get_pos()), 0, 0, True)
 		game_gui.refresh()
-
 
 		game_display.refresh_map()
 		Display.update()
