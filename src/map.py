@@ -1,3 +1,6 @@
+from block import Block
+from input import Move
+
 def bound(func):
 	"""
 	Decorator to put an entity within the bounds of the map.
@@ -17,14 +20,32 @@ def bound(func):
 		if entity.pos.y > self.rows-1:
 			entity.pos.y = self.rows-1
 
-		return func(self, entity)
+		func(self, entity)
 
 	return check
 
+def collision(func):
+	def check(self, entity):
+		if self.get(*entity.pos.get_pos()) == Block.wall:
+			if self.entity.moved == Move.up:
+				self.entity.pos.move_down()
+
+			elif self.entity.moved == Move.down:
+				self.entity.pos.mose_up()
+
+			elif self.entity.moved == Move.left:
+				self.entity.pos.move_right()
+
+			elif self.entity.pos.moved == Move.right:
+				self.entity.pos.move_left()
+
+		func(self, entity)
+
+	return check
 
 class Map(object):
 	def __init__(self, rows=1, cols=1):
-		self.fill = 0
+		self.fill = Block.empty
 		self.map = [[self.fill for col in range(cols)] for row in range(rows)]
 		self.rows = rows
 		self.cols = cols
@@ -33,6 +54,7 @@ class Map(object):
 		self.map[row, col] = icon
 
 	@bound
+	@collision
 	def put_entity(self, entity):
 		"""
 		Takes an entity object and uses its pos_y and pos_x to place it on the map with its icon
