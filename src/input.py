@@ -1,13 +1,8 @@
 from enum import Enum
+from config import keys
 
-
-class MoveKey(Enum):
-	up = ord('w')
-	down = ord('s')
-	left = ord('a')
-	right = ord('d')
-	done = ord('1')
-	none = None
+class Move(Enum):
+	up, down, right, left, done, none = range(6)
 
 
 class Input(object):
@@ -20,12 +15,12 @@ class Input(object):
 		self.scr = scr
 
 	def get_move_key(self):
-		input_move = self.scr.getch()
+		input_move = chr(self.scr.getch())
 
-		# Return the MoveKey that matches the input_move
-		for key in MoveKey:
-			if input_move == key.value:
-				return key
+		for key, value in keys.items():
+			if value == input_move:
+				for move_key in Move:
+					if key == move_key.name:
+						return move_key
 
-		# Return none if none matches
-		return MoveKey.none
+		return Move.none
