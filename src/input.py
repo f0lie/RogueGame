@@ -1,5 +1,7 @@
 from enum import Enum
+
 from config import keys
+
 
 class Move(Enum):
 	up, down, right, left, done, none = range(6)

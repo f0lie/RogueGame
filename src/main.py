@@ -45,7 +45,7 @@ def main(stdscr):
 		game_display.refresh_map()
 		Display.update()
 
-		if key == input.MoveKey.done:
+		if key == input.Move.done:
 			done = True
 
 

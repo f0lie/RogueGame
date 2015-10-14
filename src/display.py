@@ -1,12 +1,13 @@
 from enum import Enum
-
 import curses
 
 import position
 from block import Block, Entity
 
+
 class Orientation(Enum):
 	top, bottom, right, left, none = range(5)
+
 
 class Display(object):
 	def __init__(self, rows=1, cols=1, pos_y=0, pos_x=0):
@@ -28,13 +29,14 @@ class Display(object):
 	def update():
 		curses.doupdate()
 
+
 class DisplayMap(Display):
 	def __init__(self, game_map, pos_y=0, pos_x=0):
 		self.game_map = game_map
-		super().__init__(game_map.rows+2, game_map.cols+2, pos_y, pos_x)
+		super().__init__(game_map.rows + 2, game_map.cols + 2, pos_y, pos_x)
 
-		self._win_map = self._win.subwin((self.rows-2)+1, self.cols-2,
-		                                 pos_y+1, pos_x+1)
+		self._win_map = self._win.subwin((self.rows - 2) + 1, self.cols - 2,
+		                                 pos_y + 1, pos_x + 1)
 		self._win.noutrefresh()
 
 		self.graphic = {
@@ -51,6 +53,7 @@ class DisplayMap(Display):
 
 		self._win_map.noutrefresh()
 
+
 class DisplayHook(Display):
 	def __init__(self, hook_display, orient=Orientation.none, rows=1, cols=1):
 		super().__init__(rows, cols)
@@ -59,8 +62,8 @@ class DisplayHook(Display):
 		# Move the screen to the hooked display
 		self._orient(hook_display)
 
-		self._win_word = self._win.subwin((rows-2)+1, cols-2,
-		                                  self.pos.y+1, self.pos.x+1)
+		self._win_word = self._win.subwin((rows - 2) + 1, cols - 2,
+		                                  self.pos.y + 1, self.pos.x + 1)
 
 	def print(self, str, y=None, x=None):
 		if y != None or x != None:

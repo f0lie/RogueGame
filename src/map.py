@@ -1,6 +1,7 @@
 from block import Block
 from input import Move
 
+
 def bound(func):
 	"""
 	Decorator to put an entity within the bounds of the map.
@@ -14,15 +15,16 @@ def bound(func):
 		if entity.pos.y < 0:
 			entity.pos.y = 0
 
-		if entity.pos.x > self.cols-1:
-			entity.pos.x = self.cols-1
+		if entity.pos.x > self.cols - 1:
+			entity.pos.x = self.cols - 1
 
-		if entity.pos.y > self.rows-1:
-			entity.pos.y = self.rows-1
+		if entity.pos.y > self.rows - 1:
+			entity.pos.y = self.rows - 1
 
 		func(self, entity)
 
 	return check
+
 
 def collision(func):
 	def check(self, entity):
@@ -42,6 +44,7 @@ def collision(func):
 		func(self, entity)
 
 	return check
+
 
 class Map(object):
 	def __init__(self, rows=1, cols=1):
