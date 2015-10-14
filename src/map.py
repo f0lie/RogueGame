@@ -1,4 +1,4 @@
-from block import Block
+from block import Block, Entity
 from input import Move
 
 
@@ -29,17 +29,17 @@ def bound(func):
 def collision(func):
 	def check(self, entity):
 		if self.get(*entity.pos.get_pos()) == Block.wall:
-			if self.entity.moved == Move.up:
-				self.entity.pos.move_down()
+			if entity.moved == Move.up:
+				entity.pos.move_down()
 
-			elif self.entity.moved == Move.down:
-				self.entity.pos.mose_up()
+			elif entity.moved == Move.down:
+				entity.pos.move_up()
 
-			elif self.entity.moved == Move.left:
-				self.entity.pos.move_right()
+			elif entity.moved == Move.left:
+				entity.pos.move_right()
 
-			elif self.entity.pos.moved == Move.right:
-				self.entity.pos.move_left()
+			elif entity.moved == Move.right:
+				entity.pos.move_left()
 
 		func(self, entity)
 
@@ -48,13 +48,10 @@ def collision(func):
 
 class Map(object):
 	def __init__(self, rows=1, cols=1):
-		self.fill = Block.empty
-		self.map = [[self.fill for col in range(cols)] for row in range(rows)]
+		self.map = [[Block.space for col in range(cols)] for row in range(rows)]
 		self.rows = rows
 		self.cols = cols
-
-	def put_icon(self, row, col, icon):
-		self.map[row, col] = icon
+		self.room_list = []
 
 	@bound
 	@collision
@@ -66,10 +63,30 @@ class Map(object):
 		"""
 		self.map[entity.pos.y][entity.pos.x] = entity.icon
 
+	def put_room(self, room):
+		self.room_list.append(room)
+
+		for row in range(room.rows):
+			for col in range(room.cols):
+				if(row == 0 or row == room.rows-1 or
+				   col == 0 or col == room.cols-1):
+					self.set(room.pos_1.y+row, room.pos_1.x+col, Block.wall)
+				else:
+					self.set(room.pos_1.y+row, room.pos_1.x+col, Block.empty)
+
 	def flush(self):
 		for row in range(self.rows):
 			for col in range(self.cols):
-				self.map[row][col] = self.fill
+				block = self.map[row][col]
+				if block == Entity.player:
+					self.set(row, col, Block.space)
+				elif (block != Block.wall and
+					block != Block.empty and
+					block != Block.space):
+					self.set(row, col, Block.empty)
 
 	def get(self, row, col):
 		return self.map[row][col]
+
+	def set(self, row, col, icon):
+		self.map[row][col] = icon
