@@ -31,12 +31,9 @@ class Display(object):
 
 
 class DisplayMap(Display):
-	def __init__(self, game_map, pos_y=0, pos_x=0):
+	def __init__(self, game_map, rows=1, cols=1, pos_y=0, pos_x=0):
 		self.game_map = game_map
-		super().__init__(game_map.rows + 2, game_map.cols + 2, pos_y, pos_x)
-
-		self._win_map = self._win.derwin((self.rows - 2)+1, self.cols - 2, 1, 1)
-		self._win.noutrefresh()
+		super().__init__(rows, cols, pos_y, pos_x)
 
 		self.graphic = {
 			Block.empty: curses.ACS_BULLET,
@@ -44,6 +41,14 @@ class DisplayMap(Display):
 			Block.space: ord(' '),
 			Entity.player: ord('@')
 		}
+
+
+class DisplayMapBounded(DisplayMap):
+	def __init__(self, game_map, pos_y=0, pos_x=0):
+		super().__init__(game_map, game_map.rows+2, game_map.cols+2, pos_y, pos_x)
+
+		self._win_map = self._win.derwin((self.rows - 2)+1, self.cols - 2, 1, 1)
+		self._win.noutrefresh()
 
 	def refresh_map(self):
 		""" Draw the entire map on the screen and refresh the screen """
@@ -54,7 +59,6 @@ class DisplayMap(Display):
 
 		self._win_map.move(0, 0)
 		self._win_map.noutrefresh()
-
 
 class DisplayHook(Display):
 	def __init__(self, hook_display, orient=Orientation.none, rows=1, cols=1):

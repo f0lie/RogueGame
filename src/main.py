@@ -20,7 +20,7 @@ def main(stdscr):
 	game_input = input.Input(stdscr)
 
 	game_map = map.Map(20, 30)
-	game_display = display.DisplayMap(game_map)
+	game_display = display.DisplayMapBounded(game_map)
 
 	first_room = room.Room(5, 5, 10, 10)
 	game_map.put_room(first_room)
