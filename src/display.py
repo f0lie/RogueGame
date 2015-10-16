@@ -6,62 +6,128 @@ from block import Block, Entity
 
 
 class Orientation(Enum):
+	"""
+	Enum for the relative position of a display
+	"""
 	top, bottom, right, left, none = range(5)
 
 
 class Display(object):
-	def __init__(self, rows=1, cols=1, pos_y=0, pos_x=0):
+	def __init__(self, rows=1, cols=1, pos_row=0, pos_col=0):
 		"""
-		Object that interacts with curses to display on screen
+		The class that other displays inherit from
 		"""
-		self.pos = position.Position(pos_y, pos_x)
 
-		self._win = curses.newwin(rows, cols, pos_y, pos_x)
+		self._win = curses.newwin(rows, cols, pos_row, pos_col)
+		self._win_pos = position.Position(pos_row, pos_col)
+		self._win_rows, self._win_cols = rows, cols
+
 		self._win.border()
 
-		self.rows, self.cols = rows, cols
-
 	def refresh(self):
-		''' Avoid spamming doupdate with regular win.refresh '''
+		'''
+		Avoid spamming curses.doupdate with regular win.refresh
+		'''
 		self._win.noutrefresh()
 
 	@staticmethod
 	def update():
+		'''
+		Make the curses.doupdate method easier to read as Display.update
+		'''
 		curses.doupdate()
 
 
 class DisplayMap(Display):
-	def __init__(self, game_map, rows=1, cols=1, pos_y=0, pos_x=0):
-		self.game_map = game_map
-		super().__init__(rows, cols, pos_y, pos_x)
+	def __init__(self, map, rows=1, cols=1, pos_row=0, pos_col=0):
+		'''
+		The class that displays handling the map inherits from
+		Contains graphics dict to transform Enum representations to graphics on console
+		'''
+		self.map = map
+		super().__init__(rows, cols, pos_row, pos_col)
 
 		self.graphic = {
 			Block.empty: curses.ACS_BULLET,
-			Block.wall: curses.ACS_BLOCK,
+			Block.wall: curses.ACS_BOARD,
 			Block.space: ord(' '),
-			Entity.player: ord('@')
+			Entity.player: ord('@'),
+			Block.error: curses.ACS_CKBOARD
 		}
 
 
-class DisplayMapBounded(DisplayMap):
-	def __init__(self, game_map, pos_y=0, pos_x=0):
-		super().__init__(game_map, game_map.rows+2, game_map.cols+2, pos_y, pos_x)
+class DisplayMapScroll(DisplayMap):
+	def __init__(self, map, player, rows=1, cols=1, size_y=100, size_x=100, pos_row=0, pos_col=0, ):
+		'''
+		Display that focuses on player to display map
+		Allows for maps of huge sizes as only a small portion of the map is displayed at once
 
-		self._win_map = self._win.derwin((self.rows - 2)+1, self.cols - 2, 1, 1)
+		rows, cols is the size of the display
+		size_y, size_x is the size of the pad screen map is written on
+		'''
+		super().__init__(map, rows, cols, pos_row, pos_col)
+
+		self._win_scroll = curses.newpad(size_y, size_x)
+
+		self._mid_rows = rows // 2
+		self._mid_cols = cols // 2
+		self._scroll_rows = rows
+		self._scroll_cols = cols
+
+		self._player = player
+
+		self.refresh_map()
+
+	def refresh_map(self):
+		'''
+		Redraws the map and draw only a small portion of the map on the screen relative to the player
+		'''
+		for row in range(self.map.rows):
+			for col in range(self.map.cols):
+				item = self.map.get(row, col)
+				# Off set drawing of map with mid_rows and mid_cols so player is in the center
+				self._win_scroll.addch(row + self._mid_rows,
+				                       col + self._mid_cols,
+				                       self.graphic.get(item, ord('X')))
+
+		# Curses pad uses refresh to move the "focus" of screen, hence ugly code
+									 # Begin drawing from player's pos
+		self._win_scroll.noutrefresh(self._player.pos.row,
+		                             self._player.pos.col,
+		                             # Draw pad on main screen within the borders
+		                             self._win_pos.row + 1,
+		                             self._win_pos.col + 1,
+		                             # End drawing at the length of the end of specified size
+		                             self._win_pos.row + self._scroll_rows - 1,
+		                             self._win_pos.col + self._scroll_cols - 1)
+
+
+class DisplayMapBounded(DisplayMap):
+	def __init__(self, map, pos_row=0, pos_col=0):
+		'''
+		Display that represents the map as the same size of the display
+		'''
+		super().__init__(map, map.rows + 2, map.cols + 2, pos_row, pos_col)
+
+		self._win_map = self._win.derwin((self._win_rows - 2) + 1, self._win_cols - 2, 1, 1)
 		self._win.noutrefresh()
 
 	def refresh_map(self):
 		""" Draw the entire map on the screen and refresh the screen """
-		for row in range(self.game_map.rows):
-			for col in range(self.game_map.cols):
-				item = self.game_map.get(row, col)
+		for row in range(self.map.rows):
+			for col in range(self.map.cols):
+				item = self.map.get(row, col)
 				self._win_map.addch(row, col, self.graphic.get(item, 'X'))
 
 		self._win_map.move(0, 0)
 		self._win_map.noutrefresh()
 
+
 class DisplayHook(Display):
 	def __init__(self, hook_display, orient=Orientation.none, rows=1, cols=1):
+		'''
+		Create a display that is placed relative to another display
+		'''
 		super().__init__(rows, cols)
 		# Where to place the screen in relation to the hooked display
 		self.orient = orient
@@ -70,10 +136,12 @@ class DisplayHook(Display):
 
 		self._win_word = self._win.derwin((rows - 2) + 1, cols - 2, 1, 1)
 
-	def print(self, str, y=None, x=None, clear_line=False):
-		if self._win_word.getyx()[0] == (self.rows-2):
-			self._win_word.move(0,0)
+	def print(self, str, y=None, x=None, clear_line=True):
+		# Avoids crashing when the cursor reaches the end of the window
+		if self._win_word.getyx()[0] == (self._win_rows - 2):
+			self._win_word.move(0, 0)
 
+		# Clears the text on the line so it doesn't overlap
 		if clear_line:
 			self._win_word.move(y, x)
 			self._win_word.clrtoeol()
@@ -86,20 +154,24 @@ class DisplayHook(Display):
 		self._win_word.noutrefresh()
 
 	def _orient(self, hook_display):
+		'''
+		Given the orientation relative to the hook_display, moves the display to orient
+		'''
+		# Positions add or sub 1 to avoid over lapping with hook_display
 		if self.orient == Orientation.right or self.orient == Orientation.none:
-			self.pos.y = hook_display.pos.y
-			self.pos.x = hook_display.pos.x + hook_display.cols
+			self._win_pos.row = hook_display._win_pos.row
+			self._win_pos.col = hook_display._win_pos.col + hook_display._win_cols + 1
 
 		elif self.orient == Orientation.left:
-			self.pos.y = hook_display.pos.y
-			self.pos.x = hook_display.pos.x - self.cols
+			self._win_pos.row = hook_display._win_pos.row
+			self._win_pos.col = hook_display._win_pos.col - self._win_cols - 1
 
 		elif self.orient == Orientation.bottom:
-			self.pos.y = hook_display.pos.y + hook_display.rows
-			self.pos.x = hook_display.pos.x
+			self._win_pos.row = hook_display._win_pos.row + hook_display._win_rows + 1
+			self._win_pos.col = hook_display._win_pos.col
 
 		elif self.orient == Orientation.top:
-			self.pos.y = hook_display.pos.y - self.rows
-			self.pos.x = hook_display.pos.x
+			self._win_pos.row = hook_display._win_pos.row - self._win_rows - 1
+			self._win_pos.col = hook_display._win_pos.col
 
-		self._win.mvwin(*self.pos.get_pos())
+		self._win.mvwin(*self._win_pos.get_pos())
