@@ -66,7 +66,7 @@ class DisplayMap(Display):
 
 
 class DisplayMapScroll(DisplayMap):
-	def __init__(self, map, player, rows=1, cols=1, size_y=100, size_x=100, pos_row=0, pos_col=0, ):
+	def __init__(self, map, player, rows=1, cols=1, size_y=100, size_x=100, pos_row=0, pos_col=0):
 		"""
 		Display that focuses on player to display map
 		Allows for maps of huge sizes as only a small portion of the map is displayed at once
@@ -78,14 +78,17 @@ class DisplayMapScroll(DisplayMap):
 
 		self._win_scroll = curses.newpad(size_y, size_x)
 
-		self._mid_rows = rows // 2
-		self._mid_cols = cols // 2
-		self._scroll_rows = rows
-		self._scroll_cols = cols
+		# Sub 2 so scroll doesn't overwrite screen borders
+		self._scroll_rows = rows - 2
+		self._scroll_cols = cols - 2
+
+		self._mid_rows = self._scroll_rows // 2
+		self._mid_cols = self._scroll_cols // 2
 
 		self._player = player
 
-		self.refresh_map()
+		# Draw main screen borders
+		self.refresh()
 
 	def refresh_map(self):
 		"""
@@ -106,9 +109,9 @@ class DisplayMapScroll(DisplayMap):
 		                             # Draw pad on main screen within the borders
 		                             self._win_pos.row + 1,
 		                             self._win_pos.col + 1,
-		                             # End drawing at the length of the end of specified size
-		                             self._win_pos.row + self._scroll_rows - 1,
-		                             self._win_pos.col + self._scroll_cols - 1)
+		                             # End drawing at before the borders of the specified screen
+		                             self._win_pos.row + self._scroll_rows,
+		                             self._win_pos.col + self._scroll_cols)
 
 
 class DisplayMapBounded(DisplayMap):
@@ -166,21 +169,20 @@ class DisplayHook(Display):
 		"""
 		Given the orientation relative to the hook_display, moves the display to orient
 		"""
-		# Positions add or sub 1 to avoid over lapping with hook_display
 		if self.orient == Orientation.right or self.orient == Orientation.none:
 			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col + hook_display._win_cols + 1
+			self._win_pos.col = hook_display._win_pos.col + hook_display._win_cols
 
 		elif self.orient == Orientation.left:
 			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col - self._win_cols - 1
+			self._win_pos.col = hook_display._win_pos.col - self._win_cols
 
 		elif self.orient == Orientation.bottom:
-			self._win_pos.row = hook_display._win_pos.row + hook_display._win_rows + 1
+			self._win_pos.row = hook_display._win_pos.row + hook_display._win_rows
 			self._win_pos.col = hook_display._win_pos.col
 
 		elif self.orient == Orientation.top:
-			self._win_pos.row = hook_display._win_pos.row - self._win_rows - 1
+			self._win_pos.row = hook_display._win_pos.row - self._win_rows
 			self._win_pos.col = hook_display._win_pos.col
 
 		self._win.mvwin(*self._win_pos.get_pos())
