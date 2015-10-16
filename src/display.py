@@ -19,7 +19,7 @@ class Display(object):
 		"""
 		self._win = curses.newwin(rows, cols, pos_row, pos_col)
 		self._win_pos = position.Position(pos_row, pos_col)
-		self._win_rows, self._win_cols = rows, cols
+		self._win_size = position.Size(rows, cols)
 
 		self._win.border()
 
@@ -78,11 +78,9 @@ class DisplayMapScroll(DisplayMap):
 		self._win_scroll = curses.newpad(size_y, size_x)
 
 		# Sub 2 so scroll doesn't overwrite screen borders
-		self._scroll_rows = rows - 2
-		self._scroll_cols = cols - 2
+		self._scroll_size = position.Size(rows-2, cols-2)
 
-		self._mid_rows = self._scroll_rows // 2
-		self._mid_cols = self._scroll_cols // 2
+		self._mid_size = position.Size(self._scroll_size.rows//2, self._scroll_size.cols//2)
 
 		self._player = player
 
@@ -97,8 +95,8 @@ class DisplayMapScroll(DisplayMap):
 			for col in range(self.map.cols):
 				item = self.map.get(row, col)
 				# Off set drawing of map with mid_rows and mid_cols so player is in the center
-				self._win_scroll.addch(row + self._mid_rows,
-				                       col + self._mid_cols,
+				self._win_scroll.addch(row + self._mid_size.rows,
+				                       col + self._mid_size.cols,
 				                       self.graphic.get(item, ord('X')))
 
 			# Curses pad uses refresh to move the "focus" of screen, hence ugly code
@@ -109,8 +107,8 @@ class DisplayMapScroll(DisplayMap):
 		                             self._win_pos.row + 1,
 		                             self._win_pos.col + 1,
 		                             # End drawing at before the borders of the specified screen
-		                             self._win_pos.row + self._scroll_rows,
-		                             self._win_pos.col + self._scroll_cols)
+		                             self._win_pos.row + self._scroll_size.rows,
+		                             self._win_pos.col + self._scroll_size.cols)
 
 
 class DisplayMapBounded(DisplayMap):
@@ -120,7 +118,7 @@ class DisplayMapBounded(DisplayMap):
 		"""
 		super().__init__(map, map.rows + 2, map.cols + 2, pos_row, pos_col)
 
-		self._win_map = self._win.derwin((self._win_rows - 2) + 1, self._win_cols - 2, 1, 1)
+		self._win_map = self._win.derwin((self._win_size.rows - 2) + 1, self._win_size.cols - 2, 1, 1)
 		self._win.noutrefresh()
 
 	def refresh_map(self):
@@ -149,7 +147,7 @@ class DisplayHook(Display):
 
 	def print(self, str, y=None, x=None, clear_line=True):
 		# Avoids crashing when the cursor reaches the end of the window
-		if self._win_word.getyx()[0] == (self._win_rows - 2):
+		if self._win_word.getyx()[0] == (self._win_size.rows - 2):
 			self._win_word.move(0, 0)
 
 		# Clears the text on the line so it doesn't overlap
@@ -170,18 +168,18 @@ class DisplayHook(Display):
 		"""
 		if self.orient == Orientation.right or self.orient == Orientation.none:
 			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col + hook_display._win_cols
+			self._win_pos.col = hook_display._win_pos.col + hook_display._win_size.cols
 
 		elif self.orient == Orientation.left:
 			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col - self._win_cols
+			self._win_pos.col = hook_display._win_pos.col - self._win_size.cols
 
 		elif self.orient == Orientation.bottom:
-			self._win_pos.row = hook_display._win_pos.row + hook_display._win_rows
+			self._win_pos.row = hook_display._win_pos.row + hook_display._win_size.rows
 			self._win_pos.col = hook_display._win_pos.col
 
 		elif self.orient == Orientation.top:
-			self._win_pos.row = hook_display._win_pos.row - self._win_rows
+			self._win_pos.row = hook_display._win_pos.row - self._win_size.rows
 			self._win_pos.col = hook_display._win_pos.col
 
 		self._win.mvwin(*self._win_pos.get_pos())
