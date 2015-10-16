@@ -1,5 +1,4 @@
 --Input--
--Keybindings
 -Menu screen and option screen
 -Saving
 
