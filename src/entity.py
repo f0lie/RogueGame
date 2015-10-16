@@ -1,22 +1,26 @@
-from input import Move
+from enum import Enum
+
 import position
 import block
+
+
+class Move(Enum):
+	up, down, right, left, done, none = range(6)
 
 
 class Entity(object):
 	def __init__(self, pos_y=0, pos_x=0, icon=block.Entity.player):
 		"""
-		The object that contains an entity with pos_x and pos_y with an icon to represent it
-
-		:param pos_y: Position on the y axis of the map
-		:param pos_x: Position on the x axis of the map
-		:param icon: Represents the entity
+		Contain pos, representation, and direction
 		"""
 		self.pos = position.Position(pos_y, pos_x)
 		self.icon = icon
 		self.moved = Move.none
 
 	def move(self, direction):
+		'''
+		Base on Move type, use position to move in correct direction
+		'''
 		if direction == Move.up:
 			self.pos.move_up()
 		elif direction == Move.down:
