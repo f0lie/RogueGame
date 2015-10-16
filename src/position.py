@@ -21,3 +21,15 @@ class Position(object):
 
 	def move_right(self):
 		self.col += 1
+
+class Size(object):
+	def __init__(self, rows, cols):
+		self.rows = rows
+		self.cols =cols
+
+	def get_size(self):
+		return self.rows, self.cols
+
+	def resize(self, rows, cols):
+		self.rows = rows
+		self.cols = cols
