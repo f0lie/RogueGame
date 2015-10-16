@@ -1,4 +1,4 @@
-from position import Position
+from position import Position, Size
 from block import Room, Block
 
 
@@ -11,8 +11,7 @@ class Room(object):
 
 		self.pos_1 = Position(pos_y, pos_x)
 		self.pos_2 = Position(pos_y+rows, pos_x+cols)
-		self.rows = rows
-		self.cols = cols
+		self.size = Size(rows, cols)
 		self.fill = fill
 
 		# Specific the block of walls
@@ -29,3 +28,6 @@ class Room(object):
 	def collision(self, other_room):
 		return (self.pos_1.col <= other_room.pos_2.x and self.pos_2.col >= other_room.pos_1.x and
 		        self.pos_1.row <= other_room.pos_2.y and self.pos_2.row >= other_room.pos_1.y)
+
+	def generate(self, min_pos, max_pos, min_size, max_size):
+		pass
