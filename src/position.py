@@ -1,23 +1,23 @@
 class Position(object):
-	def __init__(self, y=0, x=0):
-		self.y = y
-		self.x = x
+	def __init__(self, row=0, col=0):
+		self.row = row
+		self.col = col
 
 	def get_pos(self):
-		return self.y, self.x
+		return self.row, self.col
 
-	def move(self, y, x):
-		self.y = y
-		self.x = x
+	def move(self, row, col):
+		self.row = row
+		self.col = col
 
 	def move_up(self):
-		self.y -= 1
+		self.row -= 1
 
 	def move_down(self):
-		self.y += 1
+		self.row += 1
 
 	def move_left(self):
-		self.x -= 1
+		self.col -= 1
 
 	def move_right(self):
-		self.x += 1
+		self.col += 1
