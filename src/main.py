@@ -9,10 +9,10 @@ import room
 from display import Orientation
 import block
 
-'''
+"""
 	Screen should be 80x24 like a VT100
 	I'll figure out how to deal with different screens or enforce this.
-'''
+"""
 
 
 def main(stdscr):
@@ -27,7 +27,7 @@ def main(stdscr):
 	main_map.put_entity(player)
 
 	first_room = room.Room(0, 0, 25, 25)
-	sec_room = room.Room(7, 7, 10, 10, block.Block.space)
+	sec_room = room.Room(7, 20, 10, 10, left=block.Block.empty)
 	main_map.put_room(first_room)
 	main_map.put_room(sec_room)
 

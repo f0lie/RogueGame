@@ -1,11 +1,14 @@
 from position import Position
-from block import Block
+from block import Room, Block
 
 
 class Room(object):
 	def __init__(self, pos_y=0, pos_x=0, rows=1, cols=1, fill=Block.empty,
-	             left=Block.wall, right=Block.wall, top=Block.wall, bottom=Block.wall,
-	             top_left=Block.wall, top_right=Block.wall, bottom_left=Block.wall, bottom_right=Block.wall):
+	             left=Room.left, right=Room.right,
+	             top=Room.top, bottom=Room.bottom,
+	             top_left=Room.top_left, top_right=Room.top_right,
+	             bottom_left=Room.bottom_left, bottom_right=Room.bottom_right):
+
 		self.pos_1 = Position(pos_y, pos_x)
 		self.pos_2 = Position(pos_y+rows, pos_x+cols)
 		self.rows = rows

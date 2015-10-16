@@ -2,7 +2,7 @@ from enum import Enum
 import curses
 
 import position
-from block import Block, Entity
+from block import Block, Entity, Room
 
 
 class Orientation(Enum):
@@ -25,46 +25,55 @@ class Display(object):
 		self._win.border()
 
 	def refresh(self):
-		'''
+		"""
 		Avoid spamming curses.doupdate with regular win.refresh
-		'''
+		"""
 		self._win.noutrefresh()
 
 	@staticmethod
 	def update():
-		'''
+		"""
 		Make the curses.doupdate method easier to read as Display.update
-		'''
+		"""
 		curses.doupdate()
 
 
 class DisplayMap(Display):
 	def __init__(self, map, rows=1, cols=1, pos_row=0, pos_col=0):
-		'''
+		"""
 		The class that displays handling the map inherits from
 		Contains graphics dict to transform Enum representations to graphics on console
-		'''
+		"""
 		self.map = map
 		super().__init__(rows, cols, pos_row, pos_col)
 
 		self.graphic = {
 			Block.empty: curses.ACS_BULLET,
-			Block.wall: curses.ACS_BOARD,
 			Block.space: ord(' '),
 			Entity.player: ord('@'),
-			Block.error: curses.ACS_CKBOARD
+			Block.error: curses.ACS_CKBOARD,
+
+			Room.left: curses.ACS_VLINE,
+			Room.right: curses.ACS_VLINE,
+			Room.top: curses.ACS_HLINE,
+			Room.bottom: curses.ACS_HLINE,
+
+			Room.top_left: curses.ACS_ULCORNER,
+			Room.top_right: curses.ACS_URCORNER,
+			Room.bottom_left: curses.ACS_LLCORNER,
+			Room.bottom_right: curses.ACS_LRCORNER
 		}
 
 
 class DisplayMapScroll(DisplayMap):
 	def __init__(self, map, player, rows=1, cols=1, size_y=100, size_x=100, pos_row=0, pos_col=0, ):
-		'''
+		"""
 		Display that focuses on player to display map
 		Allows for maps of huge sizes as only a small portion of the map is displayed at once
 
 		rows, cols is the size of the display
 		size_y, size_x is the size of the pad screen map is written on
-		'''
+		"""
 		super().__init__(map, rows, cols, pos_row, pos_col)
 
 		self._win_scroll = curses.newpad(size_y, size_x)
@@ -79,9 +88,9 @@ class DisplayMapScroll(DisplayMap):
 		self.refresh_map()
 
 	def refresh_map(self):
-		'''
+		"""
 		Redraws the map and draw only a small portion of the map on the screen relative to the player
-		'''
+		"""
 		for row in range(self.map.rows):
 			for col in range(self.map.cols):
 				item = self.map.get(row, col)
@@ -104,9 +113,9 @@ class DisplayMapScroll(DisplayMap):
 
 class DisplayMapBounded(DisplayMap):
 	def __init__(self, map, pos_row=0, pos_col=0):
-		'''
+		"""
 		Display that represents the map as the same size of the display
-		'''
+		"""
 		super().__init__(map, map.rows + 2, map.cols + 2, pos_row, pos_col)
 
 		self._win_map = self._win.derwin((self._win_rows - 2) + 1, self._win_cols - 2, 1, 1)
@@ -125,9 +134,9 @@ class DisplayMapBounded(DisplayMap):
 
 class DisplayHook(Display):
 	def __init__(self, hook_display, orient=Orientation.none, rows=1, cols=1):
-		'''
+		"""
 		Create a display that is placed relative to another display
-		'''
+		"""
 		super().__init__(rows, cols)
 		# Where to place the screen in relation to the hooked display
 		self.orient = orient
@@ -154,9 +163,9 @@ class DisplayHook(Display):
 		self._win_word.noutrefresh()
 
 	def _orient(self, hook_display):
-		'''
+		"""
 		Given the orientation relative to the hook_display, moves the display to orient
-		'''
+		"""
 		# Positions add or sub 1 to avoid over lapping with hook_display
 		if self.orient == Orientation.right or self.orient == Orientation.none:
 			self._win_pos.row = hook_display._win_pos.row

@@ -1,4 +1,4 @@
-from block import Block, Entity
+from block import Block, Room, Entity
 from entity import Move
 
 
@@ -26,11 +26,11 @@ def bound(func):
 
 
 def collision(func):
-	'''
+	"""
 	Decorator to check if the entity moved into the pos of a wall and move it back
-	'''
+	"""
 	def check(self, entity):
-		if self.get(*entity.pos.get_pos()) == Block.wall:
+		if self.get(*entity.pos.get_pos()) in Room:
 			if entity.moved == Move.up:
 				entity.pos.move_down()
 
@@ -65,23 +65,13 @@ class Map(object):
 		self.map[entity.pos.row][entity.pos.col] = entity.icon
 
 	def put_room(self, room):
-		'''
+		"""
 		Add room to list and place walls in the correct places
-		'''
+		"""
 		self.room_list.append(room)
 
 		for row in range(room.rows):
 			for col in range(room.cols):
-
-				if(row == 0 or row == room.rows-1 or
-				   col == 0 or col == room.cols-1):
-					self.set(room.pos_1.row+row, room.pos_1.col+col, Block.wall)
-				else:
-					self.set(room.pos_1.row+row, room.pos_1.col+col, room.fill)
-
-				'''
-				is broke
-
 				room_row, room_col = room.pos_1.row+row, room.pos_1.col+col
 
 				if row == 0:
@@ -90,7 +80,7 @@ class Map(object):
 					elif col == room.cols-1:
 						self.set(room_row, room_col, room.top_right)
 					else:
-						self.set(room_row, room_col, Block.error)
+						self.set(room_row, room_col, room.top)
 
 				elif row == room.rows-1:
 					if col == 0:
@@ -106,20 +96,19 @@ class Map(object):
 				elif col == room.cols-1:
 					self.set(room_row, room_col, room.right)
 
-				self.set(room_row, room_col, room.fill)
-				'''
+				else:
+					self.set(room_row, room_col, room.fill)
+
 	def flush(self):
-		'''
+		"""
 		If the block isn't a wall, empty or space, then set it empty
-		'''
+		Horribly inefficient as it iterates through the entire map
+		"""
 		for row in range(self.rows):
 			for col in range(self.cols):
 				block = self.map[row][col]
-				if (block != Block.wall and
-					block != Block.empty and
-					block != Block.space):
+				if (block in Entity):
 					self.set(row, col, Block.empty)
-
 	def get(self, row, col):
 		return self.map[row][col]
 

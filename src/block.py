@@ -5,7 +5,7 @@ class Block(Enum):
 	"""
 	Enum that represents blocks on the map
 	"""
-	wall, space, empty, error = range(4)
+	space, empty, error = range(3)
 
 
 class Entity(Enum):
@@ -13,3 +13,10 @@ class Entity(Enum):
 	Enum that represents entities on the map
 	"""
 	player = 0
+
+
+class Room(Enum):
+	"""
+	Enum that represents the type of walls on a room
+	"""
+	left, right, top, bottom, top_left, top_right, bottom_left, bottom_right = range(8)
