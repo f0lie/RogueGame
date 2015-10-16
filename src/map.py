@@ -70,22 +70,22 @@ class Map(object):
 		"""
 		self.room_list.append(room)
 
-		for row in range(room.rows):
-			for col in range(room.cols):
+		for row in range(room.size.rows):
+			for col in range(room.size.cols):
 				room_row, room_col = room.pos_1.row+row, room.pos_1.col+col
 
 				if row == 0:
 					if col == 0:
 						self.set(room_row, room_col, room.top_left)
-					elif col == room.cols-1:
+					elif col == room.size.cols-1:
 						self.set(room_row, room_col, room.top_right)
 					else:
 						self.set(room_row, room_col, room.top)
 
-				elif row == room.rows-1:
+				elif row == room.size.rows-1:
 					if col == 0:
 						self.set(room_row, room_col, room.bottom_left)
-					elif col == room.cols-1:
+					elif col == room.size.cols-1:
 						self.set(room_row, room_col, room.bottom_right)
 					else:
 						self.set(room_row, room_col, room.bottom)
@@ -93,7 +93,7 @@ class Map(object):
 				elif col == 0:
 					self.set(room_row, room_col, room.left)
 
-				elif col == room.cols-1:
+				elif col == room.size.cols-1:
 					self.set(room_row, room_col, room.right)
 
 				else:
