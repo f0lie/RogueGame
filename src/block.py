@@ -2,8 +2,14 @@ from enum import Enum
 
 
 class Block(Enum):
-	wall, space, empty = range(3)
+	"""
+	Enum that represents blocks on the map
+	"""
+	wall, space, empty, error = range(4)
 
 
 class Entity(Enum):
-	player = range(1)
+	"""
+	Enum that represents entities on the map
+	"""
+	player = 0
