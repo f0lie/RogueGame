@@ -17,7 +17,6 @@ class Display(object):
 		"""
 		The class that other displays inherit from
 		"""
-
 		self._win = curses.newwin(rows, cols, pos_row, pos_col)
 		self._win_pos = position.Position(pos_row, pos_col)
 		self._win_rows, self._win_cols = rows, cols
@@ -102,8 +101,8 @@ class DisplayMapScroll(DisplayMap):
 				                       col + self._mid_cols,
 				                       self.graphic.get(item, ord('X')))
 
-		# Curses pad uses refresh to move the "focus" of screen, hence ugly code
-									 # Begin drawing from player's pos
+			# Curses pad uses refresh to move the "focus" of screen, hence ugly code
+			# Begin drawing from player's pos
 		self._win_scroll.noutrefresh(self._player.pos.row,
 		                             self._player.pos.col,
 		                             # Draw pad on main screen within the borders
