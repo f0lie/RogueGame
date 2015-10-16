@@ -31,12 +31,14 @@ def main(stdscr):
 	main_map.put_room(first_room)
 	main_map.put_room(sec_room)
 
-	map_display = display.DisplayMapScroll(main_map, player, 22, 42)
+	map_display = display.DisplayMapScroll(main_map, player, 20, 80)
 
-	hook_display = display.DisplayHook(map_display, Orientation.right, 22, 10)
+	hook_display = display.DisplayHook(map_display, Orientation.bottom, 4, 20)
+	hook_to_hook_display = display.DisplayHook(hook_display, Orientation.right, 4, 10)
 
 	map_display.refresh_map()
 	hook_display.refresh()
+	hook_to_hook_display.refresh()
 	Display.update()
 
 	done = False
