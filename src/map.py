@@ -1,25 +1,24 @@
 from block import Block, Entity
-from input import Move
+from entity import Move
 
 
 def bound(func):
 	"""
 	Decorator to put an entity within the bounds of the map.
-	Requires an entity and instance of GameMap.
 	"""
 
 	def check(self, entity):
-		if entity.pos.x < 0:
-			entity.pos.x = 0
+		if entity.pos.col < 0:
+			entity.pos.col = 0
 
-		if entity.pos.y < 0:
-			entity.pos.y = 0
+		if entity.pos.row < 0:
+			entity.pos.row = 0
 
-		if entity.pos.x > self.cols - 1:
-			entity.pos.x = self.cols - 1
+		if entity.pos.col > self.cols - 1:
+			entity.pos.col = self.cols - 1
 
-		if entity.pos.y > self.rows - 1:
-			entity.pos.y = self.rows - 1
+		if entity.pos.row > self.rows - 1:
+			entity.pos.row = self.rows - 1
 
 		func(self, entity)
 
@@ -27,6 +26,9 @@ def bound(func):
 
 
 def collision(func):
+	'''
+	Decorator to check if the entity moved into the pos of a wall and move it back
+	'''
 	def check(self, entity):
 		if self.get(*entity.pos.get_pos()) == Block.wall:
 			if entity.moved == Move.up:
@@ -47,40 +49,73 @@ def collision(func):
 
 
 class Map(object):
-	def __init__(self, rows=1, cols=1):
-		self.map = [[Block.space for col in range(cols)] for row in range(rows)]
+	def __init__(self, rows=1, cols=1, fill=Block.space):
+		self.map = [[fill for col in range(cols)] for row in range(rows)]
 		self.rows = rows
 		self.cols = cols
+		self.fill = fill
 		self.room_list = []
 
 	@bound
 	@collision
 	def put_entity(self, entity):
 		"""
-		Takes an entity object and uses its pos_y and pos_x to place it on the map with its icon
-
-		:param entity: The entity object to be read
+		Place entity's icon with its pos
 		"""
-		self.map[entity.pos.y][entity.pos.x] = entity.icon
+		self.map[entity.pos.row][entity.pos.col] = entity.icon
 
 	def put_room(self, room):
+		'''
+		Add room to list and place walls in the correct places
+		'''
 		self.room_list.append(room)
 
 		for row in range(room.rows):
 			for col in range(room.cols):
+
 				if(row == 0 or row == room.rows-1 or
 				   col == 0 or col == room.cols-1):
-					self.set(room.pos_1.y+row, room.pos_1.x+col, Block.wall)
+					self.set(room.pos_1.row+row, room.pos_1.col+col, Block.wall)
 				else:
-					self.set(room.pos_1.y+row, room.pos_1.x+col, Block.empty)
+					self.set(room.pos_1.row+row, room.pos_1.col+col, room.fill)
 
+				'''
+				is broke
+
+				room_row, room_col = room.pos_1.row+row, room.pos_1.col+col
+
+				if row == 0:
+					if col == 0:
+						self.set(room_row, room_col, room.top_left)
+					elif col == room.cols-1:
+						self.set(room_row, room_col, room.top_right)
+					else:
+						self.set(room_row, room_col, Block.error)
+
+				elif row == room.rows-1:
+					if col == 0:
+						self.set(room_row, room_col, room.bottom_left)
+					elif col == room.cols-1:
+						self.set(room_row, room_col, room.bottom_right)
+					else:
+						self.set(room_row, room_col, room.bottom)
+
+				elif col == 0:
+					self.set(room_row, room_col, room.left)
+
+				elif col == room.cols-1:
+					self.set(room_row, room_col, room.right)
+
+				self.set(room_row, room_col, room.fill)
+				'''
 	def flush(self):
+		'''
+		If the block isn't a wall, empty or space, then set it empty
+		'''
 		for row in range(self.rows):
 			for col in range(self.cols):
 				block = self.map[row][col]
-				if block == Entity.player:
-					self.set(row, col, Block.space)
-				elif (block != Block.wall and
+				if (block != Block.wall and
 					block != Block.empty and
 					block != Block.space):
 					self.set(row, col, Block.empty)
