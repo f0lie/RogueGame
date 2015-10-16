@@ -18,9 +18,9 @@ class Entity(object):
 		self.moved = Move.none
 
 	def move(self, direction):
-		'''
+		"""
 		Base on Move type, use position to move in correct direction
-		'''
+		"""
 		if direction == Move.up:
 			self.pos.move_up()
 		elif direction == Move.down:
