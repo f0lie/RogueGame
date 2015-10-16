@@ -6,6 +6,8 @@ from display import Display
 import input
 import entity
 import room
+from display import Orientation
+import block
 
 '''
 	Screen should be 80x24 like a VT100
@@ -17,41 +19,39 @@ def main(stdscr):
 	curses.curs_set(0)
 	stdscr.noutrefresh()
 
-	game_input = input.Input(stdscr)
+	main_input = input.Input(stdscr)
 
-	game_map = map.Map(20, 30)
-	game_display = display.DisplayMapBounded(game_map)
+	main_map = map.Map(50, 50)
 
-	first_room = room.Room(5, 5, 10, 10)
-	game_map.put_room(first_room)
+	player = entity.Entity(22, 22)
+	main_map.put_entity(player)
 
-	game_gui = display.DisplayHook(game_display, display.Orientation.right, 22, 20)
+	first_room = room.Room(0, 0, 25, 25)
+	sec_room = room.Room(7, 7, 10, 10, block.Block.space)
+	main_map.put_room(first_room)
+	main_map.put_room(sec_room)
 
-	player = entity.Entity()
-	game_map.put_entity(player)
+	map_display = display.DisplayMapScroll(main_map, player, 20, 40)
 
-	game_gui.print(str(player.pos.get_pos()), 0, 0, True)
+	hook_display = display.DisplayHook(map_display, Orientation.right, 22, 10)
 
-	game_gui.refresh()
-	game_display.refresh_map()
+	map_display.refresh_map()
+	hook_display.refresh()
 	Display.update()
 
 	done = False
 	while not done:
-		key = game_input.get_move_key()
+		key = main_input.get_move_key()
 		player.move(key)
 
-		game_map.flush()
+		main_map.flush()
+		main_map.put_entity(player)
+		hook_display.print(str(player.pos.get_pos()), 0, 0)
 
-		game_map.put_entity(player)
-
-		game_gui.print(str(player.pos.get_pos()), 0, 0, True)
-		game_gui.refresh()
-
-		game_display.refresh_map()
+		map_display.refresh_map()
 		Display.update()
 
-		if key == input.Move.done:
+		if key == entity.Move.done:
 			done = True
 
 
