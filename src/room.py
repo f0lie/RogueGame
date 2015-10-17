@@ -31,6 +31,10 @@ class Room(object):
 		return cls(pos.row, pos.col, size.rows, size.cols, **kwargs)
 
 	def collision(self, other_room):
+		"""
+		Checks if two rooms intersect each other
+		The logic is clearer as a one dimension line
+		"""
 		pos_2 = Position(self.pos.row + self.size.rows,
 		                 self.pos.col + self.size.cols)
 		other_room_pos_2 = Position(other_room.pos.row + other_room.size.rows,
@@ -41,6 +45,9 @@ class Room(object):
 
 	@classmethod
 	def generate(cls, min_pos, max_pos, min_size, max_size):
+		"""
+		Create a randomly size room from min_size to max_size between the position min_pos and max_pos
+		"""
 		size = Size(randint(min_size.rows, max_size.rows), randint(min_size.cols, max_size.cols))
 		pos = Position(randint(min_pos.row, max_pos.row - size.rows), randint(min_pos.col, max_pos.col - size.cols))
 		return cls.from_objects(pos, size)
@@ -57,6 +64,9 @@ class RoomList():
 		self._room_list.append(room)
 
 	def generate(self, num, min_pos, max_pos, min_size, max_size):
+		"""
+		Given a number of rooms to create, generate a list of rooms that don't intersect each other
+		"""
 		for i in range(num):
 			room = Room.generate(min_pos, max_pos, min_size, max_size)
 			while self.is_collision(room):
@@ -64,6 +74,9 @@ class RoomList():
 			self.append(room)
 
 	def is_collision(self, room):
+		"""
+		Iterate through the list of rooms to test for collisions
+		"""
 		for other_room in self:
 			if other_room.collision(room):
 				return True
