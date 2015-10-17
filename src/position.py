@@ -5,15 +5,38 @@ from orient import Orientation
 
 class Position(object):
 	def __init__(self, row=0, col=0):
-		self.row = row
-		self.col = col
+		self._row = row
+		self._col = col
 
-	def get_pos(self):
-		return self.row, self.col
+	@property
+	def row(self):
+		return self._row
+
+	@row.setter
+	def row(self, value):
+		self._row = value
+
+	@property
+	def col(self):
+		return self._col
+
+	@col.setter
+	def col(self, value):
+		self._col = value
+
+	@property
+	def point(self):
+		return self._row, self._col
+
+	@point.setter
+	def point(self, value):
+		row, col = value
+		self._row = row
+		self._col = col
 
 	def distance(self, other_pos):
-		y = fabs(self.row - other_pos.row)
-		x = fabs(self.col - other_pos.col)
+		y = fabs(self._row - other_pos.row)
+		x = fabs(self._col - other_pos.col)
 
 		return floor(sqrt(pow(y, 2) + pow(x, 2)))
 
@@ -23,51 +46,66 @@ class Position(object):
 		Thus if other_pos is to the right of object then
 		you will find other_pos to the right of object
 		"""
-		if self.row == other_pos.row:
-			if self.col < other_pos.col:
+		if self._row == other_pos.row:
+			if self._col < other_pos.col:
 				return Orientation.right
-			elif self.col > other_pos.col:
+			elif self._col > other_pos.col:
 				return Orientation.left
-			elif self.col == other_pos.col:
+			elif self._col == other_pos.col:
 				return Orientation.same
 
-		elif self.col == other_pos.col:
-			if self.row < other_pos.row:
+		elif self._col == other_pos.col:
+			if self._row < other_pos.row:
 				return Orientation.bottom
-			elif self.row > other_pos.row:
+			elif self._row > other_pos.row:
 				return Orientation.top
-			elif self.row == other_pos.row:
+			elif self._row == other_pos.row:
 				return Orientation.same
 
 		else:
 			# meaning other_pos is diagonal to the object
 			return Orientation.none
 
-	def move(self, row, col):
-		self.row = row
-		self.col = col
-
 	def move_up(self):
-		self.row -= 1
+		self._row -= 1
 
 	def move_down(self):
-		self.row += 1
+		self._row += 1
 
 	def move_left(self):
-		self.col -= 1
+		self._col -= 1
 
 	def move_right(self):
-		self.col += 1
+		self._col += 1
 
 
 class Size(object):
 	def __init__(self, rows=1, cols=1):
-		self.rows = rows
-		self.cols = cols
+		self._rows = rows
+		self._cols = cols
 
-	def get_size(self):
-		return self.rows, self.cols
+	@property
+	def rows(self):
+		return self._rows
 
-	def resize(self, rows, cols):
-		self.rows = rows
-		self.cols = cols
+	@rows.setter
+	def rows(self, value):
+		self._rows = value
+
+	@property
+	def cols(self):
+		return self._cols
+
+	@cols.setter
+	def cols(self, value):
+		self._col = value
+
+	@property
+	def size(self):
+		return self._rows, self._cols
+
+	@size.setter
+	def size(self, value):
+		rows, cols = value
+		self._rows = rows
+		self._cols = cols

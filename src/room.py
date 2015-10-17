@@ -35,13 +35,13 @@ class Room(object):
 		Checks if two rooms intersect each other
 		The logic is clearer as a one dimension line
 		"""
-		pos_2 = Position(self.pos.row + self.size.rows,
-		                 self.pos.col + self.size.cols)
+		pos_2 = Position(self.pos._row + self.size.rows,
+		                 self.pos._col + self.size.cols)
 		other_room_pos_2 = Position(other_room.pos.row + other_room.size.rows,
 		                            other_room.pos.col + other_room.size.cols)
 
-		return (self.pos.col <= other_room_pos_2.col and pos_2.col >= other_room.pos.col and
-		        self.pos.row <= other_room_pos_2.row and pos_2.row >= other_room.pos.row)
+		return (self.pos._col <= other_room_pos_2._col and pos_2._col >= other_room.pos.col and
+		        self.pos._row <= other_room_pos_2._row and pos_2._row >= other_room.pos.row)
 
 	@classmethod
 	def generate(cls, min_pos, max_pos, min_size, max_size):

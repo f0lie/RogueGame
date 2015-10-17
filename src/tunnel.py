@@ -39,14 +39,14 @@ class Tunnel(object):
 	@classmethod
 	def create_vertical(cls, pos_1, pos_2):
 		"""
-		From pos_1 ignore pos_2's col to create a horizontal line to pos_2's row
+		From pos_1 ignore pos_2's _col to create a horizontal line to pos_2's _row
 		"""
 		return cls.from_pos(pos_1, Position(pos_2.row, pos_1.col))
 
 	@classmethod
 	def create_horizontal(cls, pos_1, pos_2):
 		"""
-		From pos_1 ignore pos_2's row to create a vertical to pos_2's col
+		From pos_1 ignore pos_2's _row to create a vertical to pos_2's _col
 		"""
 		return cls.from_pos(pos_1, Position(pos_1.row, pos_2.col))
 

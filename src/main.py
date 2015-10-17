@@ -41,7 +41,7 @@ def main(stdscr):
 
 		main_map.flush()
 		main_map.put_entity(player)
-		hook_display.print(str(player.pos.get_pos()), 0, 0)
+		hook_display.print(str(player.pos.point), 0, 0)
 
 		map_display.refresh_map()
 		Display.update()

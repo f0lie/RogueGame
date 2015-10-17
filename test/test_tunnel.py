@@ -12,7 +12,7 @@ class TestTunnel(TestCase):
 
 		tunnel = Tunnel.create_vertical(pos_1, pos_2)
 
-		self.assertEquals(tunnel.pos.get_pos(), pos_1.get_pos())
+		self.assertEquals(tunnel.pos.point, pos_1.point)
 		self.assertEquals(tunnel.length, 1)
 		self.assertEquals(tunnel.orient, Orientation.bottom)
 
@@ -22,6 +22,6 @@ class TestTunnel(TestCase):
 
 		tunnel = Tunnel.create_horizontal(pos_1, pos_2)
 
-		self.assertEquals(tunnel.pos.get_pos(), pos_1.get_pos())
+		self.assertEquals(tunnel.pos.point, pos_1.point)
 		self.assertEquals(tunnel.length, 2)
 		self.assertEquals(tunnel.orient, Orientation.right)

@@ -97,11 +97,11 @@ class DisplayMapScroll(DisplayMap):
 		self._win_scroll.noutrefresh(self._player.pos.row,
 		                             self._player.pos.col,
 		                             # Draw pad on main screen within the borders
-		                             self._win_pos.row + 1,
-		                             self._win_pos.col + 1,
+		                             self._win_pos._row + 1,
+		                             self._win_pos._col + 1,
 		                             # End drawing at before the borders of the specified screen
-		                             self._win_pos.row + self._scroll_size.rows,
-		                             self._win_pos.col + self._scroll_size.cols)
+		                             self._win_pos._row + self._scroll_size.rows,
+		                             self._win_pos._col + self._scroll_size.cols)
 
 
 class DisplayMapBounded(DisplayMap):
@@ -121,7 +121,7 @@ class DisplayMapBounded(DisplayMap):
 				item = self.map.get(row, col)
 				self._win_map.addch(row, col, self.graphic.get(item, 'X'))
 
-		self._win_map.move(0, 0)
+		self._win_map.point = (0, 0)
 		self._win_map.noutrefresh()
 
 
@@ -160,19 +160,19 @@ class DisplayHook(Display):
 		Given the orientation relative to the hook_display, moves the display to orient
 		"""
 		if self.orient == Orientation.right or self.orient == Orientation.none:
-			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col + hook_display._win_size.cols
+			self._win_pos._row = hook_display._win_pos.row
+			self._win_pos._col = hook_display._win_pos.col + hook_display._win_size.cols
 
 		elif self.orient == Orientation.left:
-			self._win_pos.row = hook_display._win_pos.row
-			self._win_pos.col = hook_display._win_pos.col - self._win_size.cols
+			self._win_pos._row = hook_display._win_pos.row
+			self._win_pos._col = hook_display._win_pos.col - self._win_size.cols
 
 		elif self.orient == Orientation.bottom:
-			self._win_pos.row = hook_display._win_pos.row + hook_display._win_size.rows
-			self._win_pos.col = hook_display._win_pos.col
+			self._win_pos._row = hook_display._win_pos.row + hook_display._win_size.rows
+			self._win_pos._col = hook_display._win_pos.col
 
 		elif self.orient == Orientation.top:
-			self._win_pos.row = hook_display._win_pos.row - self._win_size.rows
-			self._win_pos.col = hook_display._win_pos.col
+			self._win_pos._row = hook_display._win_pos.row - self._win_size.rows
+			self._win_pos._col = hook_display._win_pos.col
 
-		self._win.mvwin(*self._win_pos.get_pos())
+		self._win.mvwin(*self._win_pos.point)

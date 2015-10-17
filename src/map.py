@@ -33,7 +33,7 @@ def collision(func):
 	"""
 
 	def check(self, entity):
-		if self.get(*entity.pos.get_pos()) in Room:
+		if self.get(*entity.pos.point) in Room:
 			if entity.moved == Move.up:
 				entity.pos.move_down()
 
