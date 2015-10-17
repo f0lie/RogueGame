@@ -3,6 +3,7 @@ from entity import Move
 from room import RoomList
 from position import Size, Position
 
+
 def bound(func):
 	"""
 	Decorator to put an entity within the bounds of the map.
@@ -30,6 +31,7 @@ def collision(func):
 	"""
 	Decorator to check if the entity moved into the pos of a wall and move it back
 	"""
+
 	def check(self, entity):
 		if self.get(*entity.pos.get_pos()) in Room:
 			if entity.moved == Move.up:
@@ -50,7 +52,7 @@ def collision(func):
 
 
 class Map(object):
-	def __init__(self, rows=1, cols=1, rooms=1, room_size=Size(10,10), fill=Block.space):
+	def __init__(self, rows=1, cols=1, rooms=1, room_size=Size(10, 10), fill=Block.space):
 		self.map = [[fill for col in range(cols)] for row in range(rows)]
 		self.size = Size(rows, cols)
 
@@ -77,20 +79,20 @@ class Map(object):
 		"""
 		for row in range(room.size.rows):
 			for col in range(room.size.cols):
-				room_row, room_col = room.pos.row+row, room.pos.col+col
+				room_row, room_col = room.pos.row + row, room.pos.col + col
 
 				if row == 0:
 					if col == 0:
 						self.set(room_row, room_col, room.top_left)
-					elif col == room.size.cols-1:
+					elif col == room.size.cols - 1:
 						self.set(room_row, room_col, room.top_right)
 					else:
 						self.set(room_row, room_col, room.top)
 
-				elif row == room.size.rows-1:
+				elif row == room.size.rows - 1:
 					if col == 0:
 						self.set(room_row, room_col, room.bottom_left)
-					elif col == room.size.cols-1:
+					elif col == room.size.cols - 1:
 						self.set(room_row, room_col, room.bottom_right)
 					else:
 						self.set(room_row, room_col, room.bottom)
@@ -98,7 +100,7 @@ class Map(object):
 				elif col == 0:
 					self.set(room_row, room_col, room.left)
 
-				elif col == room.size.cols-1:
+				elif col == room.size.cols - 1:
 					self.set(room_row, room_col, room.right)
 
 				else:
