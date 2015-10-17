@@ -1,6 +1,6 @@
 from enum import Enum
 
-import position
+from position import Position
 import block
 
 
@@ -9,11 +9,11 @@ class Move(Enum):
 
 
 class Entity(object):
-	def __init__(self, pos_y=0, pos_x=0, icon=block.Entity.player):
+	def __init__(self, pos_row=0, pos_col=0, icon=block.Entity.player):
 		"""
 		Contain pos, representation, and direction
 		"""
-		self.pos = position.Position(pos_y, pos_x)
+		self.pos = Position(pos_row, pos_col)
 		self.icon = icon
 		self.moved = Move.none
 
