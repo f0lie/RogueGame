@@ -1,13 +1,13 @@
 import curses
 
+import block
+import entity
+import room
+import input
 import map
 import display
 from display import Display
-import input
-import entity
-import room
 from display import Orientation
-import block
 
 """
 	Screen should be 80x24 like a VT100
@@ -21,15 +21,10 @@ def main(stdscr):
 
 	main_input = input.Input(stdscr)
 
-	main_map = map.Map(50, 50)
+	main_map = map.Map(50, 50, rooms=10)
 
-	player = entity.Entity(22, 22)
+	player = entity.Entity(0, 0)
 	main_map.put_entity(player)
-
-	first_room = room.Room(0, 0, 25, 25)
-	sec_room = room.Room(7, 20, 10, 10, left=block.Block.empty)
-	main_map.put_room(first_room)
-	main_map.put_room(sec_room)
 
 	map_display = display.DisplayMapScroll(main_map, player, 20, 80)
 
