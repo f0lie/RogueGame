@@ -1,8 +1,6 @@
 import curses
 
-import block
 import entity
-import room
 import input
 import map
 import display
