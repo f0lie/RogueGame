@@ -25,6 +25,10 @@ class Tunnel(object):
 
 	@classmethod
 	def from_pos(cls, pos_1, pos_2):
+		"""
+		Return a tunnel with pos_1 as its pos, the orient fro pos_1 to pos_2 as its orient, and
+		the distance between the two points as its length
+		"""
 		orient = pos_1.compare(pos_2)
 		if orient != Orientation.none:
 			length = pos_1.distance(pos_2)
@@ -56,6 +60,9 @@ class Connection(object):
 		return iter(self.tunnels)
 
 	def connect(self, pos_1, pos_2):
+		"""
+		Create two tunnels that randomly goes from horizontal to vertical or the other way to get to a point
+		"""
 		if randint(0, 1) == 0:
 			self.tunnels.append(Tunnel.create_horizontal(pos_1, pos_2))
 			self.tunnels.append(Tunnel.create_vertical(Position(pos_1.row, pos_2.col), pos_2))
