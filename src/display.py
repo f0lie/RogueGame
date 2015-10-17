@@ -78,9 +78,9 @@ class DisplayMapScroll(DisplayMap):
 		self._win_scroll = curses.newpad(size_y, size_x)
 
 		# Sub 2 so scroll doesn't overwrite screen borders
-		self._scroll_size = Size(rows-2, cols-2)
+		self._scroll_size = Size(rows - 2, cols - 2)
 
-		self._mid_size = Size(self._scroll_size.rows//2, self._scroll_size.cols//2)
+		self._mid_size = Size(self._scroll_size.rows // 2, self._scroll_size.cols // 2)
 
 		self._player = player
 
