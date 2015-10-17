@@ -54,12 +54,12 @@ class Tunnel(object):
 class Connection(object):
 	def __init__(self, pos_1, pos_2):
 		self.tunnels = []
-		self.connect(pos_1, pos_2)
+		self._connect(pos_1, pos_2)
 
 	def __iter__(self):
 		return iter(self.tunnels)
 
-	def connect(self, pos_1, pos_2):
+	def _connect(self, pos_1, pos_2):
 		"""
 		Create two tunnels that randomly goes from horizontal to vertical or the other way to get to a point
 		"""
