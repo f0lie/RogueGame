@@ -9,8 +9,7 @@ class Room(object):
 	             top_left=Room.top_left, top_right=Room.top_right,
 	             bottom_left=Room.bottom_left, bottom_right=Room.bottom_right):
 
-		self.pos_1 = Position(pos_y, pos_x)
-		self.pos_2 = Position(pos_y+rows, pos_x+cols)
+		self.pos = Position(pos_y, pos_x)
 		self.size = Size(rows, cols)
 		self.fill = fill
 
@@ -30,8 +29,13 @@ class Room(object):
 		return cls(pos.row, pos.col, size.rows, size.cols, **kwargs)
 
 	def collision(self, other_room):
-		return (self.pos_1.col <= other_room.pos_2.col and self.pos_2.col >= other_room.pos_1.col and
-		        self.pos_1.row <= other_room.pos_2.row and self.pos_2.row >= other_room.pos_1.row)
+		pos_2 = Position(self.pos.row + self.size.rows,
+		                 self.pos.col + self.size.cols)
+		other_room_pos_2 = Position(other_room.pos.row + other_room.size.rows,
+		                       other_room.pos.col + other_room.size.cols)
+
+		return (self.pos.col <= other_room_pos_2.col and pos_2.col >= other_room.pos.col and
+		        self.pos.row <= other_room_pos_2.row and pos_2.row >= other_room.pos.row)
 
 	@classmethod
 	def generate(cls, min_pos, max_pos, min_size, max_size):
@@ -57,7 +61,7 @@ class RoomList():
 			self.append(room)
 
 	def is_collision(self, room):
-		for other_room in self._room_list:
+		for other_room in self:
 			if other_room.collision(room):
 				return True
 		return False

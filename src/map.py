@@ -77,7 +77,7 @@ class Map(object):
 		"""
 		for row in range(room.size.rows):
 			for col in range(room.size.cols):
-				room_row, room_col = room.pos_1.row+row, room.pos_1.col+col
+				room_row, room_col = room.pos.row+row, room.pos.col+col
 
 				if row == 0:
 					if col == 0:
