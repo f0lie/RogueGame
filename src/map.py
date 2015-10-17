@@ -113,6 +113,9 @@ class Map(object):
 					self.set(room_row, room_col, room.fill)
 
 	def init_connection_list(self):
+		"""
+		Generate the connections between rooms randomly based on the order
+		"""
 		for i, room in enumerate(self.room_list, start=1):
 			if i == len(self.room_list):
 				break
@@ -126,7 +129,8 @@ class Map(object):
 	def put_tunnel(self, tunnel):
 		positions = tunnel.steps()
 		for pos in positions:
-			if self.get(*pos.point) == Block.space:
+			block = self.get(*pos.point)
+			if block in Room or block == Block.space:
 				self.set(pos.row, pos.col, Block.tunnel)
 
 	def flush(self):

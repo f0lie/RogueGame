@@ -19,12 +19,12 @@ def main(stdscr):
 
 	main_input = input.Input(stdscr)
 
-	main_map = map.Map(50, 50, rooms=10)
+	main_map = map.Map(100, 100, rooms=20)
 
 	player = entity.Entity(0, 0)
 	main_map.put_entity(player)
 
-	map_display = display.DisplayMapScroll(main_map, player, 20, 80)
+	map_display = display.DisplayMapScroll(main_map, player, 20, 80, 150, 150)
 
 	hook_display = display.DisplayHook(map_display, Orientation.bottom, 4, 20)
 	hook_to_hook_display = display.DisplayHook(hook_display, Orientation.right, 4, 10)

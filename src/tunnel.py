@@ -21,6 +21,9 @@ class Tunnel(object):
 			self.type = TunnelType.vertical
 
 	def steps(self):
+		"""
+		Gives the positions the vector of tunnel intersects with
+		"""
 		positions = []
 
 		if self.orient == Orientation.top:
