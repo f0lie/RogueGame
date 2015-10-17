@@ -60,6 +60,12 @@ class RoomList():
 	def __iter__(self):
 		return iter(self._room_list)
 
+	def __getitem__(self, key):
+		return self._room_list[key]
+
+	def __len__(self):
+		return len(self._room_list)
+
 	def append(self, room):
 		self._room_list.append(room)
 
