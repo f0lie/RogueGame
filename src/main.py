@@ -5,7 +5,7 @@ import input
 import map
 import display
 from display import Display
-from display import Orientation
+from orient import Orientation
 
 """
 	Screen should be 80x24 like a VT100

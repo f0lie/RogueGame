@@ -1,15 +1,8 @@
-from enum import Enum
 import curses
 
+from orient import Orientation
 from position import Position, Size
 from block import Block, Entity, Room
-
-
-class Orientation(Enum):
-	"""
-	Enum for the relative position of a display
-	"""
-	top, bottom, right, left, none = range(5)
 
 
 class Display(object):
