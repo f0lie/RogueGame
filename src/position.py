@@ -8,6 +8,13 @@ class Position(object):
 		self._row = row
 		self._col = col
 
+	def __eq__(self, other_pos):
+		return (self._row == other_pos.row and
+		        self._col == other_pos.col)
+
+	def __str__(self):
+		return "({}, {})".format(self._row, self._col)
+
 	@property
 	def row(self):
 		return self._row
