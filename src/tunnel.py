@@ -23,6 +23,27 @@ class Tunnel(object):
 			self.type = TunnelType.none
 			raise AttributeError
 
+	def steps(self):
+		positions = []
+
+		if self.orient == Orientation.top:
+			for num in range(self.length):
+				positions.append(Position(self.pos.row - num, self.pos.col))
+
+		elif self.orient == Orientation.bottom:
+			for num in range(self.length):
+				positions.append(Position(self.pos.row + num, self.pos.col))
+
+		elif self.orient == Orientation.right:
+			for num in range(self.length):
+				positions.append(Position(self.pos.row, self.pos.col + num))
+
+		elif self.orient == Orientation.left:
+			for num in range(self.length):
+				positions.append(Position(self.pos.row, self.pos.col - num))
+
+		return positions
+
 	@classmethod
 	def from_pos(cls, pos_1, pos_2):
 		"""

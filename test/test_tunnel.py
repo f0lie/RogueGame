@@ -25,3 +25,15 @@ class TestTunnel(TestCase):
 		self.assertEquals(tunnel.pos.point, pos_1.point)
 		self.assertEquals(tunnel.length, 2)
 		self.assertEquals(tunnel.orient, Orientation.right)
+
+	def test_steps(self):
+		tunnel = Tunnel(5, 5, 5, orient=Orientation.right)
+
+		positions = tunnel.steps()
+
+		message = 'Positions {}: '.format(len(positions))
+		for pos in positions:
+			message += str(pos)
+		print(message)
+
+		self.assertTrue(Position(5, 9) in positions)
