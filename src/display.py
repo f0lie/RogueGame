@@ -1,7 +1,7 @@
 from enum import Enum
 import curses
 
-import position
+from position import Position, Size
 from block import Block, Entity, Room
 
 
@@ -18,8 +18,8 @@ class Display(object):
 		The class that other displays inherit from
 		"""
 		self._win = curses.newwin(rows, cols, pos_row, pos_col)
-		self._win_pos = position.Position(pos_row, pos_col)
-		self._win_size = position.Size(rows, cols)
+		self._win_pos = Position(pos_row, pos_col)
+		self._win_size = Size(rows, cols)
 
 		self._win.border()
 
@@ -78,9 +78,9 @@ class DisplayMapScroll(DisplayMap):
 		self._win_scroll = curses.newpad(size_y, size_x)
 
 		# Sub 2 so scroll doesn't overwrite screen borders
-		self._scroll_size = position.Size(rows-2, cols-2)
+		self._scroll_size = Size(rows-2, cols-2)
 
-		self._mid_size = position.Size(self._scroll_size.rows//2, self._scroll_size.cols//2)
+		self._mid_size = Size(self._scroll_size.rows//2, self._scroll_size.cols//2)
 
 		self._player = player
 
@@ -91,8 +91,8 @@ class DisplayMapScroll(DisplayMap):
 		"""
 		Redraws the map and draw only a small portion of the map on the screen relative to the player
 		"""
-		for row in range(self.map.rows):
-			for col in range(self.map.cols):
+		for row in range(self.map.size.rows):
+			for col in range(self.map.size.cols):
 				item = self.map.get(row, col)
 				# Off set drawing of map with mid_rows and mid_cols so player is in the center
 				self._win_scroll.addch(row + self._mid_size.rows,
@@ -116,15 +116,15 @@ class DisplayMapBounded(DisplayMap):
 		"""
 		Display that represents the map as the same size of the display
 		"""
-		super().__init__(map, map.rows + 2, map.cols + 2, pos_row, pos_col)
+		super().__init__(map, map.size.rows + 2, map.size.cols + 2, pos_row, pos_col)
 
 		self._win_map = self._win.derwin((self._win_size.rows - 2) + 1, self._win_size.cols - 2, 1, 1)
 		self._win.noutrefresh()
 
 	def refresh_map(self):
 		""" Draw the entire map on the screen and refresh the screen """
-		for row in range(self.map.rows):
-			for col in range(self.map.cols):
+		for row in range(self.map.size.rows):
+			for col in range(self.map.size.cols):
 				item = self.map.get(row, col)
 				self._win_map.addch(row, col, self.graphic.get(item, 'X'))
 
