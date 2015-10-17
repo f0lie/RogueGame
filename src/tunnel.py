@@ -19,9 +19,6 @@ class Tunnel(object):
 			self.type = TunnelType.horizontal
 		elif orient == Orientation.top or orient == Orientation.bottom:
 			self.type = TunnelType.vertical
-		else:
-			self.type = TunnelType.none
-			raise AttributeError
 
 	def steps(self):
 		positions = []
@@ -51,10 +48,10 @@ class Tunnel(object):
 		the distance between the two points as its length
 		"""
 		orient = pos_1.compare(pos_2)
-		if orient != Orientation.none:
-			length = pos_1.distance(pos_2)
-		else:
+		if orient == Orientation.none:
 			raise AttributeError
+		else:
+			length = pos_1.distance(pos_2)
 		return cls(pos_1.row, pos_1.col, length, orient)
 
 	@classmethod

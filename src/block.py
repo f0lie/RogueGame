@@ -5,7 +5,7 @@ class Block(Enum):
 	"""
 	Enum that represents blocks on the map
 	"""
-	space, empty, tunnel, error = range(4)
+	space, empty, tunnel = range(3)
 
 
 class Entity(Enum):

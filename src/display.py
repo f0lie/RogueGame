@@ -43,7 +43,7 @@ class DisplayMap(Display):
 			Block.empty: curses.ACS_BULLET,
 			Block.space: ord(' '),
 			Entity.player: ord('@'),
-			Block.error: curses.ACS_CKBOARD,
+			Block.tunnel: curses.ACS_CKBOARD,
 
 			Room.left: curses.ACS_VLINE,
 			Room.right: curses.ACS_VLINE,

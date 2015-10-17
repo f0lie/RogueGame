@@ -1,7 +1,9 @@
 from block import Block, Room, Entity
 from entity import Move
+from orient import Orientation
 from room import RoomList
 from position import Size, Position
+from tunnel import Connection
 
 
 def bound(func):
@@ -61,6 +63,10 @@ class Map(object):
 		self.room_list.generate(rooms, Position(), Position(rows, cols), Size(5, 5), room_size)
 		self.put_room_list()
 
+		self.connection_list = []
+		self.init_connection_list()
+		self.put_connections()
+
 	@bound
 	@collision
 	def put_entity(self, entity):
@@ -105,6 +111,23 @@ class Map(object):
 
 				else:
 					self.set(room_row, room_col, room.fill)
+
+	def init_connection_list(self):
+		for i, room in enumerate(self.room_list, start=1):
+			if i == len(self.room_list):
+				break
+			self.connection_list.append(Connection(room.center, self.room_list[i].center))
+
+	def put_connections(self):
+		for connection in self.connection_list:
+			for tunnel in connection:
+				self.put_tunnel(tunnel)
+
+	def put_tunnel(self, tunnel):
+		positions = tunnel.steps()
+		for pos in positions:
+			if self.get(*pos.point) == Block.space:
+				self.set(pos.row, pos.col, Block.tunnel)
 
 	def flush(self):
 		"""
