@@ -5,4 +5,4 @@ class Orientation(Enum):
 	"""
 	Enum for the relative position of a display
 	"""
-	top, bottom, right, left, none = range(5)
+	top, bottom, right, left, same, none = range(6)
