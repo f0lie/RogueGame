@@ -21,7 +21,7 @@ def main(stdscr):
 
 	main_map = map.Map(100, 100, rooms=20)
 
-	player = entity.Entity(0, 0)
+	player = entity.Entity(*main_map.room_list[0].center.point)
 	main_map.put_entity(player)
 
 	map_display = display.DisplayMapScroll(main_map, player, 20, 80, 150, 150)
@@ -37,9 +37,9 @@ def main(stdscr):
 	done = False
 	while not done:
 		key = main_input.get_move_key()
+		main_map.erase_entity(player)
 		player.move(key)
 
-		main_map.flush()
 		main_map.put_entity(player)
 		hook_display.print(str(player.pos.point), 0, 0)
 

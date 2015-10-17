@@ -35,7 +35,8 @@ def collision(func):
 	"""
 
 	def check(self, entity):
-		if self.get(*entity.pos.point) in Room:
+		block = self.get(*entity.pos.point)
+		if block in Room or block == Block.space:
 			if entity.moved == Move.up:
 				entity.pos.move_down()
 
@@ -73,7 +74,14 @@ class Map(object):
 		"""
 		Place entity's icon with its pos
 		"""
-		self.map[entity.pos.row][entity.pos.col] = entity.icon
+		entity.prev_icon = self.get(entity.pos.row, entity.pos.col)
+		self.set(entity.pos.row, entity.pos.col, entity.icon)
+
+	def erase_entity(self, entity):
+		"""
+		Put back the icon that was overwritten
+		"""
+		self.set(entity.pos.row, entity.pos.col, entity.prev_icon)
 
 	def put_room_list(self):
 		for room in self.room_list:
