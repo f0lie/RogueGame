@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from orient import Orientation
 from position import Position
-from room import Tunnel
+from tunnel import Tunnel
 
 
 class TestTunnel(TestCase):
