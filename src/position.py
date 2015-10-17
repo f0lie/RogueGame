@@ -23,7 +23,7 @@ class Position(object):
 		self.col += 1
 
 class Size(object):
-	def __init__(self, rows, cols):
+	def __init__(self, rows=1, cols=1):
 		self.rows = rows
 		self.cols =cols
 
