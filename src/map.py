@@ -1,6 +1,5 @@
 from block import Block, Room, Entity
 from entity import Move
-from orient import Orientation
 from room import RoomList
 from position import Size, Position
 from tunnel import Connection
@@ -31,7 +30,7 @@ def bound(func):
 
 def collision(func):
     """
-    Decorator to check if the entity moved into the pos of a wall and move it back
+    Decorator to check if the entity is in a wall and move it back
     """
 
     def check(self, entity):
@@ -55,13 +54,16 @@ def collision(func):
 
 
 class Map(object):
-    def __init__(self, rows=1, cols=1, rooms=1, room_size=Size(10, 10), fill=Block.space):
+    def __init__(self, rows=1, cols=1,
+                 rooms=1, room_size=Size(10, 10),
+                 fill=Block.space):
         self.map = [[fill for col in range(cols)] for row in range(rows)]
         self.size = Size(rows, cols)
 
         self.fill = fill
         self.room_list = RoomList()
-        self.room_list.generate(rooms, Position(), Position(rows, cols), Size(5, 5), room_size)
+        self.room_list.generate(rooms, Position(), Position(rows, cols),
+                                Size(5, 5), room_size)
         self.put_room_list()
 
         self.connection_list = []
@@ -127,7 +129,8 @@ class Map(object):
         for i, room in enumerate(self.room_list, start=1):
             if i == len(self.room_list):
                 break
-            self.connection_list.append(Connection(room.center, self.room_list[i].center))
+            self.connection_list.append(Connection(room.center,
+                                                   self.room_list[i].center))
 
     def put_connections(self):
         for connection in self.connection_list:
