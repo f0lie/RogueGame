@@ -11,8 +11,8 @@ class Display(object):
         The class that other displays inherit from
         """
         self._win = curses.newwin(rows, cols, pos_row, pos_col)
-        self._win_pos = Position(pos_row, pos_col)
-        self._win_size = Size(rows, cols)
+        self.win_pos = Position(pos_row, pos_col)
+        self.win_size = Size(rows, cols)
 
         self._win.border()
 
@@ -95,17 +95,16 @@ class DisplayMapScroll(DisplayMap):
                                        col + self._mid_size.cols,
                                        self.graphic.get(item, ord('X')))
 
-        # Curses pad uses refresh to move the "focus" of screen, hence ugly code
-        # Begin drawing from player's pos
+                                     # Begin drawing from player's pos
         self._win_scroll.noutrefresh(self._player.pos.row,
                                      self._player.pos.col,
                                      # Draw pad on within the borders
-                                     self._win_pos._row + 1,
-                                     self._win_pos._col + 1,
+                                     self.win_pos._row + 1,
+                                     self.win_pos._col + 1,
                                      # End drawing at before the borders
-                                     self._win_pos._row +
+                                     self.win_pos._row +
                                      self._scroll_size.rows,
-                                     self._win_pos._col +
+                                     self.win_pos._col +
                                      self._scroll_size.cols)
 
 
@@ -119,8 +118,8 @@ class DisplayMapBounded(DisplayMap):
                          pos_row, pos_col)
 
         # The actual screen with the map, must be within the outer screen
-        self._win_map = self._win.derwin((self._win_size.rows - 2) + 1,
-                                         self._win_size.cols - 2, 1, 1)
+        self._win_map = self._win.derwin((self.win_size.rows - 2) + 1,
+                                         self.win_size.cols - 2, 1, 1)
         self._win.noutrefresh()
 
     def refresh_map(self):
@@ -147,9 +146,9 @@ class DisplayHook(Display):
 
         self._win_word = self._win.derwin((rows - 2) + 1, cols - 2, 1, 1)
 
-    def print(self, str, y=None, x=None, clear_line=True):
+    def print_screen(self, str, y=None, x=None, clear_line=True):
         # Avoids crashing when the cursor reaches the end of the window
-        if self._win_word.getyx()[0] == (self._win_size.rows - 2):
+        if self._win_word.getyx()[0] == (self.win_size.rows - 2):
             self._win_word.move(0, 0)
 
         # Clears the text on the line so it doesn't overlap
@@ -157,7 +156,7 @@ class DisplayHook(Display):
             self._win_word.move(y, x)
             self._win_word.clrtoeol()
 
-        if y != None or x != None:
+        if y is not None or x is not None:
             self._win_word.addstr(y, x, str)
         else:
             self._win_word.addstr(str)
@@ -169,23 +168,23 @@ class DisplayHook(Display):
         Given the orientation, moves the display correct to the the other one
         """
         if self.orient == Orientation.right or self.orient == Orientation.none:
-            self._win_pos._row = hook_display._win_pos.row
-            self._win_pos._col = hook_display._win_pos.col + \
-                                 hook_display._win_size.cols
+            self.win_pos._row = hook_display.win_pos.row
+            self.win_pos._col = hook_display.win_pos.col + \
+                                hook_display.win_size.cols
 
         elif self.orient == Orientation.left:
-            self._win_pos._row = hook_display._win_pos.row
-            self._win_pos._col = hook_display._win_pos.col - \
-                                 self._win_size.cols
+            self.win_pos._row = hook_display.win_pos.row
+            self.win_pos._col = hook_display.win_pos.col - \
+                                self.win_size.cols
 
         elif self.orient == Orientation.bottom:
-            self._win_pos._row = hook_display._win_pos.row + \
-                                 hook_display._win_size.rows
-            self._win_pos._col = hook_display._win_pos.col
+            self.win_pos._row = hook_display.win_pos.row + \
+                                hook_display.win_size.rows
+            self.win_pos._col = hook_display.win_pos.col
 
         elif self.orient == Orientation.top:
-            self._win_pos._row = hook_display._win_pos.row - \
-                                 self._win_size.rows
-            self._win_pos._col = hook_display._win_pos.col
+            self.win_pos._row = hook_display.win_pos.row - \
+                                self.win_size.rows
+            self.win_pos._col = hook_display.win_pos.col
 
-        self._win.mvwin(*self._win_pos.point)
+        self._win.mvwin(*self.win_pos.point)

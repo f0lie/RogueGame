@@ -41,7 +41,7 @@ def main(stdscr):
         player.move(key)
 
         main_map.put_entity(player)
-        hook_display.print(str(player.pos.point), 0, 0)
+        hook_display.print_screen(str(player.pos.point), 0, 0)
 
         map_display.refresh_map()
         Display.update()
