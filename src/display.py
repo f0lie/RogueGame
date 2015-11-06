@@ -146,18 +146,18 @@ class DisplayHook(Display):
 
         self._win_word = self._win.derwin((rows - 2) + 1, cols - 2, 1, 1)
 
-    def print_screen(self, str, y=None, x=None, clear_line=True):
+    def print_screen(self, str, row=None, col=None, clear_line=True):
         # Avoids crashing when the cursor reaches the end of the window
         if self._win_word.getyx()[0] == (self.win_size.rows - 2):
             self._win_word.move(0, 0)
 
         # Clears the text on the line so it doesn't overlap
         if clear_line:
-            self._win_word.move(y, x)
+            self._win_word.move(row, col)
             self._win_word.clrtoeol()
 
-        if y is not None or x is not None:
-            self._win_word.addstr(y, x, str)
+        if row is not None or col is not None:
+            self._win_word.addstr(row, col, str)
         else:
             self._win_word.addstr(str)
 
