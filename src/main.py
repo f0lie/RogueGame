@@ -24,10 +24,17 @@ def main(stdscr):
     player = entity.Entity(*main_map.room_list[0].center.point)
     main_map.put_entity(player)
 
-    map_display = display.DisplayMapScroll(main_map, player, 20, 80, 150, 150)
+    map_display = display.DisplayMapScroll(main_map,
+                                           player,
+                                           20, 80,
+                                           150, 150)
 
-    hook_display = display.DisplayHook(map_display, Orientation.bottom, 4, 20)
-    hook_to_hook_display = display.DisplayHook(hook_display, Orientation.right, 4, 10)
+    hook_display = display.DisplayHook(map_display,
+                                       Orientation.bottom,
+                                       4, 20)
+    hook_to_hook_display = display.DisplayHook(hook_display,
+                                               Orientation.right,
+                                               4, 10)
 
     map_display.refresh_map()
     hook_display.refresh()
