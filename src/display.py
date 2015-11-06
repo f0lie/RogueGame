@@ -34,7 +34,7 @@ class DisplayMap(Display):
     def __init__(self, map, rows=1, cols=1, pos_row=0, pos_col=0):
         """
         The class that displays handling the map inherits from
-        Contains graphics dict to transform Enum representations to graphics on console
+        Contains graphics dict to transform Block to graphics on console
         """
         self.map = map
         super().__init__(rows, cols, pos_row, pos_col)
@@ -58,10 +58,12 @@ class DisplayMap(Display):
 
 
 class DisplayMapScroll(DisplayMap):
-    def __init__(self, map, player, rows=1, cols=1, size_y=100, size_x=100, pos_row=0, pos_col=0):
+    def __init__(self, map, player, rows=1, cols=1,
+                 size_y=100, size_x=100, pos_row=0, pos_col=0):
         """
         Display that focuses on player to display map
-        Allows for maps of huge sizes as only a small portion of the map is displayed at once
+        Allows for maps of huge sizes
+        Small portion of the map displayed at once
 
         rows, cols is the size of the display
         size_y, size_x is the size of the pad screen map is written on
@@ -73,7 +75,8 @@ class DisplayMapScroll(DisplayMap):
         # Sub 2 so scroll doesn't overwrite screen borders
         self._scroll_size = Size(rows - 2, cols - 2)
 
-        self._mid_size = Size(self._scroll_size.rows // 2, self._scroll_size.cols // 2)
+        self._mid_size = Size(self._scroll_size.rows // 2,
+                              self._scroll_size.cols // 2)
 
         self._player = player
 
@@ -82,26 +85,28 @@ class DisplayMapScroll(DisplayMap):
 
     def refresh_map(self):
         """
-        Redraws the map and draw only a small portion of the map on the screen relative to the player
+        Redraws map  relative to the player
         """
         for row in range(self.map.size.rows):
             for col in range(self.map.size.cols):
                 item = self.map.get(row, col)
-                # Off set drawing of map with mid_rows and mid_cols so player is in the center
+                # Off set with mid_rows and mid_cols so player is in the center
                 self._win_scroll.addch(row + self._mid_size.rows,
                                        col + self._mid_size.cols,
                                        self.graphic.get(item, ord('X')))
 
-            # Curses pad uses refresh to move the "focus" of screen, hence ugly code
-            # Begin drawing from player's pos
+        # Curses pad uses refresh to move the "focus" of screen, hence ugly code
+        # Begin drawing from player's pos
         self._win_scroll.noutrefresh(self._player.pos.row,
                                      self._player.pos.col,
-                                     # Draw pad on main screen within the borders
+                                     # Draw pad on within the borders
                                      self._win_pos._row + 1,
                                      self._win_pos._col + 1,
-                                     # End drawing at before the borders of the specified screen
-                                     self._win_pos._row + self._scroll_size.rows,
-                                     self._win_pos._col + self._scroll_size.cols)
+                                     # End drawing at before the borders
+                                     self._win_pos._row +
+                                     self._scroll_size.rows,
+                                     self._win_pos._col +
+                                     self._scroll_size.cols)
 
 
 class DisplayMapBounded(DisplayMap):
@@ -109,9 +114,13 @@ class DisplayMapBounded(DisplayMap):
         """
         Display that represents the map as the same size of the display
         """
-        super().__init__(map, map.size.rows + 2, map.size.cols + 2, pos_row, pos_col)
+        # Represents the screen surrounding the map
+        super().__init__(map, map.size.rows + 2, map.size.cols + 2,
+                         pos_row, pos_col)
 
-        self._win_map = self._win.derwin((self._win_size.rows - 2) + 1, self._win_size.cols - 2, 1, 1)
+        # The actual screen with the map, must be within the outer screen
+        self._win_map = self._win.derwin((self._win_size.rows - 2) + 1,
+                                         self._win_size.cols - 2, 1, 1)
         self._win.noutrefresh()
 
     def refresh_map(self):
@@ -157,22 +166,26 @@ class DisplayHook(Display):
 
     def _orient(self, hook_display):
         """
-        Given the orientation relative to the hook_display, moves the display to orient
+        Given the orientation, moves the display correct to the the other one
         """
         if self.orient == Orientation.right or self.orient == Orientation.none:
             self._win_pos._row = hook_display._win_pos.row
-            self._win_pos._col = hook_display._win_pos.col + hook_display._win_size.cols
+            self._win_pos._col = hook_display._win_pos.col + \
+                                 hook_display._win_size.cols
 
         elif self.orient == Orientation.left:
             self._win_pos._row = hook_display._win_pos.row
-            self._win_pos._col = hook_display._win_pos.col - self._win_size.cols
+            self._win_pos._col = hook_display._win_pos.col - \
+                                 self._win_size.cols
 
         elif self.orient == Orientation.bottom:
-            self._win_pos._row = hook_display._win_pos.row + hook_display._win_size.rows
+            self._win_pos._row = hook_display._win_pos.row + \
+                                 hook_display._win_size.rows
             self._win_pos._col = hook_display._win_pos.col
 
         elif self.orient == Orientation.top:
-            self._win_pos._row = hook_display._win_pos.row - self._win_size.rows
+            self._win_pos._row = hook_display._win_pos.row - \
+                                 self._win_size.rows
             self._win_pos._col = hook_display._win_pos.col
 
         self._win.mvwin(*self._win_pos.point)
