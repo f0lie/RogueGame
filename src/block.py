@@ -19,4 +19,5 @@ class Room(Enum):
     """
     Enum that represents the type of walls on a room
     """
-    left, right, top, bottom, top_left, top_right, bottom_left, bottom_right = range(8)
+    left, right, top, bottom,\
+    top_left, top_right, bottom_left, bottom_right = range(8)
