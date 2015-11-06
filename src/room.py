@@ -40,16 +40,20 @@ class Room(object):
         other_room_pos_2 = Position(other_room.pos.row + other_room.size.rows,
                                     other_room.pos.col + other_room.size.cols)
 
-        return (self.pos._col <= other_room_pos_2._col and pos_2._col >= other_room.pos.col and
-                self.pos._row <= other_room_pos_2._row and pos_2._row >= other_room.pos.row)
+        return (self.pos._col <= other_room_pos_2._col and
+                pos_2._col >= other_room.pos.col and
+                self.pos._row <= other_room_pos_2._row and
+                pos_2._row >= other_room.pos.row)
 
     @classmethod
     def generate(cls, min_pos, max_pos, min_size, max_size):
         """
-        Create a randomly size room from min_size to max_size between the position min_pos and max_pos
+        Create room from min_size to max_size between min_pos and max_pos
         """
-        size = Size(randint(min_size.rows, max_size.rows), randint(min_size.cols, max_size.cols))
-        pos = Position(randint(min_pos.row, max_pos.row - size.rows), randint(min_pos.col, max_pos.col - size.cols))
+        size = Size(randint(min_size.rows, max_size.rows),
+                    randint(min_size.cols, max_size.cols))
+        pos = Position(randint(min_pos.row, max_pos.row - size.rows),
+                       randint(min_pos.col, max_pos.col - size.cols))
         return cls.from_objects(pos, size)
 
 
@@ -71,7 +75,7 @@ class RoomList():
 
     def generate(self, num, min_pos, max_pos, min_size, max_size):
         """
-        Given a number of rooms to create, generate a list of rooms that don't intersect each other
+        Given a number of rooms, generate rooms that don't intersect
         """
         for i in range(num):
             room = Room.generate(min_pos, max_pos, min_size, max_size)
