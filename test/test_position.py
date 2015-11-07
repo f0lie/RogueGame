@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from position import Position
+from position import Position, Size
 from orient import Orientation
 
 
@@ -22,3 +22,11 @@ class TestPosition(TestCase):
 
         for pos_case in pos_tests:
             self.assertEquals(pos.distance(pos_case), 1)
+
+    def test_position_raising(self):
+        with self.assertRaises(ValueError):
+            Position(-1,-1)
+
+    def test_size_raising(self):
+        with self.assertRaises(ValueError):
+            Size(-1,-1)

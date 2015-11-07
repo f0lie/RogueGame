@@ -7,8 +7,8 @@ class Position(object):
     __slots__ = ['_row', '_col']
 
     def __init__(self, row=0, col=0):
-        self._row = row
-        self._col = col
+        self.row = row
+        self.col = col
 
     def __eq__(self, other_pos):
         return (self.row == other_pos.row and
@@ -95,8 +95,8 @@ class Size(object):
     __slots__ = ['_rows', '_cols']
 
     def __init__(self, rows=1, cols=1):
-        self._rows = rows
-        self._cols = cols
+        self.rows = rows
+        self.cols = cols
 
     @property
     def rows(self):
