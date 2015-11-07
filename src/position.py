@@ -5,6 +5,7 @@ from orient import Orientation
 
 class Position(object):
     __slots__ = ['_row', '_col']
+
     def __init__(self, row=0, col=0):
         self._row = row
         self._col = col
@@ -92,6 +93,7 @@ class Position(object):
 
 class Size(object):
     __slots__ = ['_rows', '_cols']
+
     def __init__(self, rows=1, cols=1):
         self._rows = rows
         self._cols = cols
