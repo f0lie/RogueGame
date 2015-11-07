@@ -49,7 +49,7 @@ class Tunnel(object):
         """
         Return a tunnel given two positions
         """
-        orient = pos_1.compare(pos_2)
+        orient = pos_1.compare_orient(pos_2)
         if orient == Orientation.none:
             raise AttributeError
         else:
