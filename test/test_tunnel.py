@@ -6,34 +6,34 @@ from tunnel import Tunnel
 
 
 class TestTunnel(TestCase):
-	def test_create_vertical(self):
-		pos_1 = Position(5, 5)
-		pos_2 = Position(6, 6)
+    def test_create_vertical(self):
+        pos_1 = Position(5, 5)
+        pos_2 = Position(6, 6)
 
-		tunnel = Tunnel.create_vertical(pos_1, pos_2)
+        tunnel = Tunnel.create_vertical(pos_1, pos_2)
 
-		self.assertEquals(tunnel.pos.point, pos_1.point)
-		self.assertEquals(tunnel.length, 1)
-		self.assertEquals(tunnel.orient, Orientation.bottom)
+        self.assertEquals(tunnel.pos.point, pos_1.point)
+        self.assertEquals(tunnel.length, 1)
+        self.assertEquals(tunnel.orient, Orientation.bottom)
 
-	def test_create_horizontal(self):
-		pos_1 = Position(5, 5)
-		pos_2 = Position(7, 7)
+    def test_create_horizontal(self):
+        pos_1 = Position(5, 5)
+        pos_2 = Position(7, 7)
 
-		tunnel = Tunnel.create_horizontal(pos_1, pos_2)
+        tunnel = Tunnel.create_horizontal(pos_1, pos_2)
 
-		self.assertEquals(tunnel.pos.point, pos_1.point)
-		self.assertEquals(tunnel.length, 2)
-		self.assertEquals(tunnel.orient, Orientation.right)
+        self.assertEquals(tunnel.pos.point, pos_1.point)
+        self.assertEquals(tunnel.length, 2)
+        self.assertEquals(tunnel.orient, Orientation.right)
 
-	def test_steps(self):
-		tunnel = Tunnel(5, 5, 5, orient=Orientation.right)
+    def test_steps(self):
+        tunnel = Tunnel(5, 5, 5, orient=Orientation.right)
 
-		positions = tunnel.steps()
+        positions = tunnel.steps()
 
-		message = 'Positions {}: '.format(len(positions))
-		for pos in positions:
-			message += str(pos)
-		print(message)
+        message = 'Positions {}: '.format(len(positions))
+        for pos in positions:
+            message += str(pos)
+        print(message)
 
-		self.assertTrue(Position(5, 9) in positions)
+        self.assertTrue(Position(5, 9) in positions)
