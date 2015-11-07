@@ -104,6 +104,8 @@ class Size(object):
 
     @rows.setter
     def rows(self, value):
+        if value < 0:
+            raise ValueError("Rows: {} is below zero".format(value))
         self._rows = value
 
     @property
@@ -112,6 +114,8 @@ class Size(object):
 
     @cols.setter
     def cols(self, value):
+        if value < 0:
+            raise ValueError("Cols: {} is below zero".format(value))
         self._cols = value
 
     @property
